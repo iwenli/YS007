@@ -8,6 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Txooo.Extension;
+using Txooo.Extension.Extension;
+using Ys.Sdk.Demo.Core;
 using Ys.Sdk.Demo.Forms;
 using Ys.Sdk.Demo.Service;
 
@@ -18,18 +21,30 @@ namespace Ys.Sdk.Demo
 		public MainForm()
 		{
 			InitializeComponent();
+			//try
+			//{
+			//	M();
+			//}
+			//catch (Exception ex)
+			//{
+			//	Log(ex.Message);
+			//}
 			Load += MainForm_Load;
 		}
 
 		private async void MainForm_Load(object sender, EventArgs e)
 		{
 			await InitServiceContext();
-			this.Text = AppInfo.AssemblyTitle + string.Format(" V{0}    PowerBy:{1}"
-				, AppInfo.AssemblyVersion.Substring(0, ConstParams.AssemblyVersion.LastIndexOf('.'))
-				, AppInfo.APP_AUTHOR);
+			this.Text = ConstParams.AssemblyTitle + string.Format(" V{0}    PowerBy:{1}"
+				, ConstParams.AssemblyVersion.Substring(0, ConstParams.AssemblyVersion.LastIndexOf('.'))
+				, ConstParams.APP_AUTHOR);
 			InitToolbar();
 			InitStatusBar();
 			InitFormControl();
+			LogService.ShowLog += (msg) =>
+			{
+				AppendLogWarning(txtLog, msg);
+			};
 		}
 
 		/// <summary>
@@ -46,9 +61,8 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		async Task InitServiceContext()
 		{
-			_context = new ServiceContext();
 			BeginOperation("正在初始化配置信息...", 0, true);
-			await Task.Delay(1000);
+			_context = new ServiceContext();
 			EndOperation();
 		}
 
@@ -62,10 +76,10 @@ namespace Ys.Sdk.Demo
 		/// <param name="e"></param>
 		void Login(object sender, EventArgs e)
 		{
-			AppendLog(txtLog, "登录中...");
+			Log("登录中...");
 			if (new Login(_context).ShowDialog(this) != DialogResult.OK)
 			{
-				AppendLog(txtLog, "登录取消...");
+				Log("登录取消...");
 			}
 		}
 		/// <summary>
@@ -114,18 +128,13 @@ namespace Ys.Sdk.Demo
 			tsLogin.Text = _context.Session.IsLogined ? string.Format("已登录为【{0} ({1})】", _context.Session.LoginInfo.Mobile, _context.Session.LoginInfo.UserId) : "登录(&I)";
 			if (_context.Session.IsLogined)
 			{
-				AppendLog(txtLog, "登录成功...");
-				AppendLog(txtLog, tsLogin.Text);
+				Log("登录成功...");
+				Log(tsLogin.Text);
 				try
 				{
-					BeginOperation("开始更新缓存数据...");
+					BeginOperation("开始更新缓存数据...", 0, true);
 					await _context.CacheContext.UpdateAsync();
 					//TODO:渲染设备列表
-					var _companyList = await _context.PassportService.GetCompanyList();
-					if (_companyList.IsSuccess)
-					{
-						_context.Session.LoginInfo.BrandList.AddRange(_companyList.Data);
-					}
 				}
 				catch (Exception ex)
 				{
@@ -186,7 +195,7 @@ namespace Ys.Sdk.Demo
 		void BeginOperation(string opName = "正在操作，请稍等...", int maxItemsCount = 100, bool disableForm = false)
 		{
 			stStatus.Text = opName;
-			AppendLog(txtLog, stStatus.Text);
+			Log(stStatus.Text);
 			stProgress.Visible = true;
 			stProgress.Maximum = maxItemsCount > 0 ? maxItemsCount : 100;
 			stProgress.Style = maxItemsCount > 0 ? ProgressBarStyle.Blocks : ProgressBarStyle.Marquee;
@@ -197,11 +206,31 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		void EndOperation(string opName = "就绪.")
 		{
-			AppendLog(txtLog, opName);
+			Log(opName);
 			stStatus.Text = opName;
 			stProgress.Visible = false;
 		}
 
 		#endregion
+
+		#region 萤石云SKD测试
+		void M()
+		{
+			T("InitSdk", YsAction.InitSdk());
+			T(YsAction.GetAccessToken());
+			var _list = YsAction.GetCameraList();
+			T("DisposeSdk", YsAction.DisposeSdk());
+		}
+
+		void T(string msg = "", bool result = true)
+		{
+			Log($"{msg} { (result ? "成功" : "失败")}");
+		}
+		#endregion
+
+		void Log(string msg)
+		{
+			AppendLog(txtLog, msg);
+		}
 	}
 }

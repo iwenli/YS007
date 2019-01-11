@@ -71,6 +71,7 @@
     <Compile Include="Common\AppConfig.cs" />
     <Compile Include="Common\ControlExtended.cs" />
     <Compile Include="Common\JsonContractResolver.cs" />
+    <Compile Include="Common\SerializeExtension.cs" />
     <Compile Include="Common\VerifyExtention.cs" />
     <Compile Include="Common\ZipHelper.cs" />
     <Compile Include="Core\YsSDK.cs" />
@@ -101,10 +102,17 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Service\Entities\DeviceInfo.cs" />
     <Compile Include="Service\Entities\Response\VerifyCodeResponse.cs" />
+    <Compile Include="Service\Entities\StoreInfo.cs" />
     <Compile Include="Service\Entities\User\BrandInfo.cs" />
+    <Compile Include="Service\Entities\Ys\CameraInfo.cs" />
+    <Compile Include="Service\Entities\Ys\Response\CameraListResponse.cs" />
+    <Compile Include="Service\Entities\Ys\Response\ResponseBase.cs" />
+    <Compile Include="Service\Http\DeviceService.cs" />
     <Compile Include="Service\Http\HttpSignClient.cs" />
     <Compile Include="Service\Http\PassportService.cs" />
+    <Compile Include="Service\Http\StoreService.cs" />
     <Compile Include="Service\RequestApiPath.cs" />
     <Compile Include="Service\Cache\CacheContext.cs" />
     <Compile Include="Service\Cache\CacheData.cs" />
@@ -132,7 +140,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Api\" />
-    <Folder Include="lib\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -149,6 +156,44 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\block_16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lib\AnalyzeData.dll" />
+    <Content Include="Lib\AudioIntercom.dll" />
+    <Content Include="Lib\AudioRender.dll" />
+    <Content Include="Lib\D3DCompiler_43.dll" />
+    <Content Include="Lib\D3DX9_43.dll" />
+    <Content Include="Lib\EagleEyeRender.dll" />
+    <Content Include="Lib\hlog.dll" />
+    <Content Include="Lib\hpr.dll" />
+    <Content Include="Lib\HWDecode.dll" />
+    <Content Include="Lib\libCASClient.dll" />
+    <Content Include="Lib\libcurl.dll" />
+    <Content Include="Lib\libeay32.dll" />
+    <Content Include="Lib\libGetHDSign.dll" />
+    <Content Include="Lib\libPPVClient2.dll" />
+    <Content Include="Lib\MidPage.dll" />
+    <Content Include="Lib\MP_Render.dll" />
+    <Content Include="Lib\MP_VIE.dll" />
+    <Content Include="Lib\NetStream.dll" />
+    <Content Include="Lib\OpenAL32.dll" />
+    <Content Include="Lib\OpenAL32New.dll" />
+    <Content Include="Lib\OpenNetStream.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Lib\opensslwrap.dll" />
+    <Content Include="Lib\paho-mqtt3c.dll" />
+    <Content Include="Lib\PlayCtrl.dll" />
+    <Content Include="Lib\pthreadVC2.dll" />
+    <Content Include="Lib\PushClient.dll" />
+    <Content Include="Lib\ssleay32.dll" />
+    <Content Include="Lib\streamclient_lib.dll" />
+    <Content Include="Lib\StunClientLib.dll" />
+    <Content Include="Lib\SuperRender.dll" />
+    <Content Include="Lib\SystemTransform.dll" />
+    <Content Include="Lib\TTSClient.dll" />
+    <Content Include="Lib\udt.dll" />
+    <Content Include="Lib\YUVProcess.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

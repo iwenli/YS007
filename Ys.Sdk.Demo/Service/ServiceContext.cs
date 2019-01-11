@@ -12,7 +12,10 @@ namespace Ys.Sdk.Demo.Service
 		{
 			Session = new Session();
 			CacheContext = CacheContext.Instance;
+			CacheContext.ServiceContext = this;
 			PassportService = new PassportService(this);
+			DeviceService = new DeviceService(this);
+			StoreService = new StoreService(this);
 		}
 
 		/// <summary>
@@ -29,5 +32,13 @@ namespace Ys.Sdk.Demo.Service
 		/// 授权服务
 		/// </summary>
 		public PassportService PassportService { get; private set; }
+		/// <summary>
+		/// 门店服务
+		/// </summary>
+		public StoreService StoreService { get; set; }
+		/// <summary>
+		/// 设备服务
+		/// </summary>
+		public DeviceService DeviceService { get; set; }
 	}
 }

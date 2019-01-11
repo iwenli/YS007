@@ -63,5 +63,19 @@ namespace Ys.Sdk.Demo.Service
 		/// </summary>
 		protected static string GetCompanyList_V1 => $"{GateWayFullPath}/gzy/account/getcompanylist";
 		#endregion
+
+		#region 门店
+		/// <summary>
+		/// 门店列表
+		/// </summary>
+		protected static string GetStoreList => $"{GateWayFullPath}/v1/store.api/getlist";
+		#endregion
+
+		#region 设备
+		/// <summary>
+		/// 设备列表
+		/// </summary>
+		protected static string GetDeviceList => $"{GateWayFullPath}/v1/device.api/getlist";
+		#endregion
 	}
 }

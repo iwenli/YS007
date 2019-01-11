@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ys.Sdk.Demo.Service.Entities;
 using Ys.Sdk.Demo.Service.Entities.User;
+using Ys.Sdk.Demo.Service.Entities.Ys;
 
 namespace Ys.Sdk.Demo.Service.Cache
 {
@@ -20,6 +22,19 @@ namespace Ys.Sdk.Demo.Service.Cache
 		/// 登陆信息
 		/// </summary>
 		public LoginInfo LoginInfo { get; set; }
+		/// <summary>
+		/// 设备信息
+		/// </summary>
+		public List<DeviceInfo> DeviceList { set; get; }
+		/// <summary>
+		/// 门店列表
+		/// </summary>
+		public List<StoreInfo> StoreList { get; set; }
+
+		/// <summary>
+		/// 监控列表
+		/// </summary>
+		public List<CameraInfo> CameraList { get; set; }
 
 		public CacheData()
 		{

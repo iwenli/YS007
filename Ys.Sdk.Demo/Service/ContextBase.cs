@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Txooo.Extension;
-using Txooo.Extension.Extension;
+using Ys.Sdk.Demo.Common;
 
 namespace Ys.Sdk.Demo.Service
 {

@@ -10,7 +10,7 @@ namespace Ys.Sdk.Demo.Core
 	/// <summary>
 	/// 萤石云SDK
 	/// </summary>
-	 class YsSDK
+	class YsSDK
 	{
 
 		[DllImport("OpenNetStream.dll")]//SDK启动

@@ -36,5 +36,22 @@ namespace Ys.Sdk.Demo.Service
 		/// 获得当前是否已经登录
 		/// </summary>
 		public bool IsLogined => Session.IsLogined;
+
+
+		/// <summary>
+		/// 获取请求token  
+		/// brandid|userid|token|storeid|deviceid|memberid
+		/// </summary>
+		/// <param name=""></param>
+		/// <returns></returns>
+		protected string GetBrandToken(long storeId = 0, long deviceId = 0, long memberId = 0)
+		{
+			if (Session.IsLogined)
+			{
+				var user = Session.LoginInfo;
+				return $"{user.BrandId}|{user.UserId}|{user.Token}|{storeId}|{deviceId}|{memberId}";
+			}
+			return "";
+		}
 	}
 }

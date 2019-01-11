@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Txooo.Extension.Extension;
+using Ys.Sdk.Demo.Common;
 using Ys.Sdk.Demo.Service.Entities;
 using Ys.Sdk.Demo.Service.Entities.Response;
 using Ys.Sdk.Demo.Service.Entities.User;

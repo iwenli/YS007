@@ -94,6 +94,11 @@ namespace Ys.Sdk.Demo.Service
 					Token = _result.Data.Token,
 					Mobile = _result.Data.Mobile
 				};
+				var _companyList = await serviceContext.PassportService.GetCompanyList();
+				if (_companyList.IsSuccess)
+				{
+					LoginInfo.BrandList.AddRange(_companyList.Data);
+				}
 				IsLogined = true;
 			}
 			catch (Exception ex)

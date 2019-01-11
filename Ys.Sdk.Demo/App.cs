@@ -1,4 +1,5 @@
 ﻿using FSLib.App.SimpleUpdater;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Txooo.Extension;
+using Ys.Sdk.Demo.Core;
 using Ys.Sdk.Demo.Service;
 
 namespace Ys.Sdk.Demo
@@ -24,7 +26,11 @@ namespace Ys.Sdk.Demo
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new MainForm());
+			if (CanRun())
+			{
+				JsonConvertSettings();
+				Application.Run(new MainForm());
+			}
 		}
 
 		/// <summary>
@@ -42,8 +48,8 @@ namespace Ys.Sdk.Demo
 				//空值处理
 				setting.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 
-				////高级用法九中的Bool类型转换 设置
-				//setting.Converters.Add(new BoolConvert("是,否"));
+				//对 JSON 数据使用混合大小写。驼峰式,但是是javascript 首字母小写形式
+				setting.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				return setting;
 			});
 		}
@@ -73,7 +79,16 @@ namespace Ys.Sdk.Demo
 				}
 				else
 				{
-					canRun = CheckUpdateTask().Result == null;
+					canRun = YsAction.InitSdk();
+					if (!canRun)
+					{
+						MessageBox.Show("监控提供商链接失败，请联系软件开发者!", AppInfo.AssemblyTitle,
+															MessageBoxButtons.OK, MessageBoxIcon.Information);
+					}
+					else
+					{
+						canRun = CheckUpdateTask().Result == null;
+					}
 				}
 			}
 			return canRun;

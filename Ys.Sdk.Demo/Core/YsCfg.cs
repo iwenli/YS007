@@ -14,8 +14,9 @@ namespace Ys.Sdk.Demo.Core
 		public string AuthAddr => "https://auth.ys7.com";
 		public string ApiUrl => "https://open.ys7.com/api/method";
 		public string PlatformAddr => "https://open.ys7.com";
-		public string PhoneNumber => "15633378999";
-		public string AppKey => "599806f22c9b4f8cbc552070cc8a08d0";
-		public string SecretKey => "a80969fc9f5b1924e4f6998e9f3632c8";
+		public string PhoneNumber => "13581952323";
+		public string AppKey => "d0cae3b600074f0aa1b9cf5f94e5dd3a";
+		public string SecretKey => "a52923c6bcdb0789e6761cbbdb13289a";
+		public string AccessToken { set; get; }
 	}
 }

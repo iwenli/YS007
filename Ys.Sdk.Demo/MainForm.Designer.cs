@@ -70,7 +70,7 @@
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(0, 25);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(1095, 587);
+			this.panel1.Size = new System.Drawing.Size(1095, 604);
 			this.panel1.TabIndex = 1;
 			// 
 			// splitContainer1
@@ -86,7 +86,7 @@
 			// splitContainer1.Panel2
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.gbLog);
-			this.splitContainer1.Size = new System.Drawing.Size(1095, 587);
+			this.splitContainer1.Size = new System.Drawing.Size(1095, 604);
 			this.splitContainer1.SplitterDistance = 849;
 			this.splitContainer1.TabIndex = 0;
 			// 
@@ -103,7 +103,7 @@
 			// splitContainer2.Panel2
 			// 
 			this.splitContainer2.Panel2.Controls.Add(this.groupBox2);
-			this.splitContainer2.Size = new System.Drawing.Size(849, 587);
+			this.splitContainer2.Size = new System.Drawing.Size(849, 604);
 			this.splitContainer2.SplitterDistance = 248;
 			this.splitContainer2.TabIndex = 0;
 			// 
@@ -113,7 +113,7 @@
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(248, 587);
+			this.groupBox1.Size = new System.Drawing.Size(248, 604);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "设备";
@@ -125,7 +125,7 @@
 			this.listBox1.ItemHeight = 12;
 			this.listBox1.Location = new System.Drawing.Point(3, 17);
 			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(242, 567);
+			this.listBox1.Size = new System.Drawing.Size(242, 584);
 			this.listBox1.TabIndex = 0;
 			// 
 			// groupBox2
@@ -133,7 +133,7 @@
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox2.Location = new System.Drawing.Point(0, 0);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(597, 587);
+			this.groupBox2.Size = new System.Drawing.Size(597, 604);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "监控";
@@ -144,7 +144,7 @@
 			this.gbLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gbLog.Location = new System.Drawing.Point(0, 0);
 			this.gbLog.Name = "gbLog";
-			this.gbLog.Size = new System.Drawing.Size(242, 587);
+			this.gbLog.Size = new System.Drawing.Size(242, 604);
 			this.gbLog.TabIndex = 0;
 			this.gbLog.TabStop = false;
 			this.gbLog.Text = "日志";
@@ -157,7 +157,7 @@
 			this.txtLog.Location = new System.Drawing.Point(3, 17);
 			this.txtLog.Name = "txtLog";
 			this.txtLog.ReadOnly = true;
-			this.txtLog.Size = new System.Drawing.Size(236, 567);
+			this.txtLog.Size = new System.Drawing.Size(236, 584);
 			this.txtLog.TabIndex = 0;
 			this.txtLog.Text = "";
 			// 
@@ -216,6 +216,7 @@
 			// 
 			// st
 			// 
+			this.st.AutoSize = false;
 			this.st.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.st.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.stStatus,
@@ -225,9 +226,9 @@
             this.toolStripStatusLabel4,
             this.toolStripStatusLabel1,
             this.toolStripStatusLabel5});
-			this.st.Location = new System.Drawing.Point(0, 612);
+			this.st.Location = new System.Drawing.Point(0, 629);
 			this.st.Name = "st";
-			this.st.Size = new System.Drawing.Size(1095, 42);
+			this.st.Size = new System.Drawing.Size(1095, 25);
 			this.st.TabIndex = 4;
 			this.st.Text = "statusStrip1";
 			// 
@@ -238,7 +239,7 @@
 			this.stStatus.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.stStatus.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.stStatus.Name = "stStatus";
-			this.stStatus.Size = new System.Drawing.Size(400, 37);
+			this.stStatus.Size = new System.Drawing.Size(300, 20);
 			this.stStatus.Text = "就绪";
 			this.stStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
