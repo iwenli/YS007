@@ -1,4 +1,6 @@
-﻿namespace Ys.Sdk.Demo
+﻿using Ys.Sdk.Demo.Properties;
+
+namespace Ys.Sdk.Demo
 {
 	partial class FormBase
 	{
@@ -28,22 +30,18 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBase));
 			this.SuspendLayout();
 			// 
 			// FormBase
 			// 
 			this.ClientSize = new System.Drawing.Size(238, 144);
 			this.Font = new System.Drawing.Font("Microsoft YaHei UI", 9F);
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
+			this.Icon = Resources.favicon;
 			this.Name = "FormBase";
-			this.ShowIcon = false;
-			this.ShowInTaskbar = false;
-			this.Text = AppInfo.PlatFormName;
 			this.ResumeLayout(false);
 
 		}
-
 		#endregion
 	}
 }

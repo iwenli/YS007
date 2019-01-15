@@ -19,7 +19,14 @@ namespace Ys.Sdk.Demo.Core
 	class YsAction
 	{
 		public static YsCfg Cfg { get; private set; } = new YsCfg();
+		#region 事件
+		/// <summary>
+		/// 订阅
+		/// </summary>
+		public static event EventHandler<SubscribeEventArgs> OnSubscribe;
+		#endregion
 
+		#region Init
 		/// <summary>
 		/// 版本
 		/// </summary>
@@ -89,7 +96,7 @@ namespace Ys.Sdk.Demo.Core
 		{
 			var _list = new List<CameraInfo>();
 			var _page = 0;
-			var _limit = 100;
+			var _limit = 500;
 			try
 			{
 				while (true)
@@ -149,5 +156,97 @@ namespace Ys.Sdk.Demo.Core
 			};
 			return _result.ToJson();
 		}
+		#endregion
+
+		#region Stop
+		/// <summary>
+		/// 停止播放（预览）
+		/// </summary>
+		/// <param name="SessionId"></param>
+		/// <returns></returns>
+		public static bool Stop(IntPtr SessionId)
+		{
+			CloseAllocion(SessionId);//每次播放结束会话
+			return YsSDK.OpenSDK_StopRealPlay(SessionId, 0) == 0;
+		}
+		/// <summary>
+		/// 播放视频（预览）
+		/// </summary>
+		/// <param name="playWnd"></param>
+		/// <param name="sessionId"></param>
+		/// <param name="cameraId"></param>
+		/// <param name="level">清晰度，0流畅，1标清，2高清</param>
+		/// <param name="safeKey">安全码</param>
+		/// <returns></returns>
+		public static bool Play(IntPtr playWnd, IntPtr sessionId, string cameraId, int level = 2, string safeKey = "MAIKE100")
+		{
+			return (YsSDK.OpenSDK_StartRealPlay(SessionId, playWnd, cameraId, AccessToken, level, safeKey, Cfg.AppKey, 0) == 0);
+		}
+		#endregion
+
+		#region 会话
+		public static IntPtr SessionId;
+		public static int SessionIdLth;
+		public static string SessionIdstr;
+		/// <summary>
+		/// 分配会话后，调用方法之后执行的回调函数
+		/// </summary>
+		static YsSDK.MsgHandler callBack = new YsSDK.MsgHandler(YsAction.HandlerWork);
+		/// <summary>
+		/// 分配会话
+		/// </summary>
+		/// <returns></returns>
+		public static IntPtr AllocSession()
+		{
+			IntPtr userID = Marshal.StringToHGlobalAnsi(Cfg.UserId);
+			bool flag = YsSDK.OpenSDK_AllocSession(callBack, userID, ref SessionId, ref SessionIdLth, false, uint.MaxValue) == 0;
+			SessionIdstr = Marshal.PtrToStringAnsi(SessionId, SessionIdLth);
+			return SessionId;
+		}
+		/// <summary>
+		/// 回调函数
+		/// </summary>
+		/// <param name="sessionId"></param>
+		/// <param name="msgType"></param>
+		/// <param name="error"></param>
+		/// <param name="info"></param>
+		/// <param name="pUser"></param>
+		/// <returns></returns>
+		public static int HandlerWork(IntPtr sessionId, uint msgType, uint error, string info, IntPtr pUser)
+		{
+			OnSubscribe?.Invoke(null, new SubscribeEventArgs(sessionId, msgType, error, info, pUser));
+			return 0;
+			//switch (MsgType)
+			//{
+			//	case 20:
+			//		JObject obj = (JObject)JsonConvert.DeserializeObject(Info);
+			//		if (Error == 0)
+			//		{
+			//			//PlayMainWindow.jObjInfo = obj;
+			//			//PlayMainWindow.isOpertion = 2;
+			//		}
+			//		break;
+			//	case 3:// 播放开始
+			//		break;
+			//	case 4:// 播放终止
+			//		break;
+			//	case 5:// 播放结束，回放结束时会有此消息
+			//		   //PlayMainWindow.mType = PlayMainWindow.MessageType.INS_PLAY_ARCHIVE_END;
+			//		break;
+			//	default:
+			//		break;
+			//}
+			//return 0;
+		}
+
+		/// <summary>
+		/// 结束会话
+		/// </summary>
+		/// <param name="sessionId"></param>
+		static bool CloseAllocion(IntPtr sessionId)
+		{
+			return (YsSDK.OpenSDK_FreeSession(sessionId.ToString()) == 0);
+		}
+		#endregion
 	}
 }

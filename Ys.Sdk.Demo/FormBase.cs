@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Ys.Sdk.Demo.Common;
+using Ys.Sdk.Demo.Properties;
 using Ys.Sdk.Demo.Service;
 
 namespace Ys.Sdk.Demo

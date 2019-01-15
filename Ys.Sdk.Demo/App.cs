@@ -134,7 +134,7 @@ namespace Ys.Sdk.Demo
 		{
 			Version newVersion = null;
 			//任务模式检测更新
-			var updater = Updater.CreateUpdaterInstance(@"http://iwenli.org/soft/7518/{0}", "update_c.xml");
+			var updater = Updater.CreateUpdaterInstance(AppInfo.UpdateUrl, "update_c.xml");
 			try
 			{
 				newVersion = await updater.CheckUpdateTask();

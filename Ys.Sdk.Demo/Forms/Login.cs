@@ -41,8 +41,8 @@ namespace Ys.Sdk.Demo.Forms
 			txtMobileCode.SetHintText("验证码");
 			btnOk.Click += BtnClick;
 			btnSendCode.Click += BtnClick;
-			txtMobile.Text = "11111496240";
-			txtMobileCode.Text = "496240";
+			txtMobile.Text = "11111498451";
+			txtMobileCode.Text = "498451";
 
 			_timer.Interval = 1000;
 			_timer.Tick += (s, e) =>

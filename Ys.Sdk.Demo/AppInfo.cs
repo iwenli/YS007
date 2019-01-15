@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ys.Sdk.Demo.Common;
 
 namespace Ys.Sdk.Demo
 {
@@ -13,6 +14,21 @@ namespace Ys.Sdk.Demo
 	/// </summary>
 	public class AppInfo : ConstParams
 	{
+		static string m_UpdateUrl = AppConfiguration.GetItem("update");
+		/// <summary>
+		/// 检测更新url
+		/// </summary>
+		public static string UpdateUrl
+		{
+			get
+			{
+				if (!Uri.IsWellFormedUriString(m_UpdateUrl, UriKind.Absolute))
+				{
+					m_UpdateUrl = "http://dm.txooo.com/software/update/{0}";
+				}
+				return m_UpdateUrl;
+			}
+		}
 		/// <summary>
 		/// 皮肤文件根目录
 		/// </summary>
@@ -126,7 +142,7 @@ namespace Ys.Sdk.Demo
 	public class ConstParams
 	{
 		#region Const
-		public const string PlatFormName = "设备监控平台";
+		public const string PlatFormName = "无人超市监控平台";
 
 		/// <summary>
 		/// 作者

@@ -1,4 +1,6 @@
-﻿namespace Ys.Sdk.Demo
+﻿using Ys.Sdk.Demo.Properties;
+
+namespace Ys.Sdk.Demo
 {
 	partial class MainForm
 	{
@@ -32,8 +34,9 @@
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.listBox1 = new System.Windows.Forms.ListBox();
+			this.flpCameraList = new System.Windows.Forms.FlowLayoutPanel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.flpPlay = new System.Windows.Forms.FlowLayoutPanel();
 			this.gbLog = new System.Windows.Forms.GroupBox();
 			this.txtLog = new System.Windows.Forms.RichTextBox();
 			this.ts = new System.Windows.Forms.ToolStrip();
@@ -59,6 +62,7 @@
 			this.splitContainer2.Panel2.SuspendLayout();
 			this.splitContainer2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
+			this.groupBox2.SuspendLayout();
 			this.gbLog.SuspendLayout();
 			this.ts.SuspendLayout();
 			this.st.SuspendLayout();
@@ -104,39 +108,49 @@
 			// 
 			this.splitContainer2.Panel2.Controls.Add(this.groupBox2);
 			this.splitContainer2.Size = new System.Drawing.Size(849, 604);
-			this.splitContainer2.SplitterDistance = 248;
+			this.splitContainer2.SplitterDistance = 282;
 			this.splitContainer2.TabIndex = 0;
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.listBox1);
+			this.groupBox1.Controls.Add(this.flpCameraList);
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(248, 604);
+			this.groupBox1.Size = new System.Drawing.Size(282, 604);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "设备";
 			// 
-			// listBox1
+			// flpCameraList
 			// 
-			this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.listBox1.FormattingEnabled = true;
-			this.listBox1.ItemHeight = 12;
-			this.listBox1.Location = new System.Drawing.Point(3, 17);
-			this.listBox1.Name = "listBox1";
-			this.listBox1.Size = new System.Drawing.Size(242, 584);
-			this.listBox1.TabIndex = 0;
+			this.flpCameraList.AutoScroll = true;
+			this.flpCameraList.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpCameraList.Location = new System.Drawing.Point(3, 17);
+			this.flpCameraList.Name = "flpCameraList";
+			this.flpCameraList.Size = new System.Drawing.Size(276, 584);
+			this.flpCameraList.TabIndex = 0;
 			// 
 			// groupBox2
 			// 
+			this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+			this.groupBox2.Controls.Add(this.flpPlay);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox2.Location = new System.Drawing.Point(0, 0);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(597, 604);
+			this.groupBox2.Size = new System.Drawing.Size(563, 604);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "监控";
+			this.groupBox2.Text = "监控预览";
+			// 
+			// flpPlay
+			// 
+			this.flpPlay.BackColor = System.Drawing.Color.Transparent;
+			this.flpPlay.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.flpPlay.Location = new System.Drawing.Point(3, 17);
+			this.flpPlay.Name = "flpPlay";
+			this.flpPlay.Size = new System.Drawing.Size(557, 584);
+			this.flpPlay.TabIndex = 0;
 			// 
 			// gbLog
 			// 
@@ -246,13 +260,13 @@
 			// stProgress
 			// 
 			this.stProgress.Name = "stProgress";
-			this.stProgress.Size = new System.Drawing.Size(400, 36);
+			this.stProgress.Size = new System.Drawing.Size(400, 19);
 			this.stProgress.Visible = false;
 			// 
 			// toolStripStatusLabel2
 			// 
 			this.toolStripStatusLabel2.Name = "toolStripStatusLabel2";
-			this.toolStripStatusLabel2.Size = new System.Drawing.Size(528, 37);
+			this.toolStripStatusLabel2.Size = new System.Drawing.Size(628, 20);
 			this.toolStripStatusLabel2.Spring = true;
 			// 
 			// toolStripStatusLabel3
@@ -260,7 +274,7 @@
 			this.toolStripStatusLabel3.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel3.IsLink = true;
 			this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-			this.toolStripStatusLabel3.Size = new System.Drawing.Size(32, 37);
+			this.toolStripStatusLabel3.Size = new System.Drawing.Size(32, 20);
 			this.toolStripStatusLabel3.Tag = "https://github.com/iwenli";
 			this.toolStripStatusLabel3.Text = "开源";
 			// 
@@ -269,7 +283,7 @@
 			this.toolStripStatusLabel4.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel4.IsLink = true;
 			this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-			this.toolStripStatusLabel4.Size = new System.Drawing.Size(32, 37);
+			this.toolStripStatusLabel4.Size = new System.Drawing.Size(32, 20);
 			this.toolStripStatusLabel4.Tag = "http://blog.iwenli.org";
 			this.toolStripStatusLabel4.Text = "博客";
 			// 
@@ -278,7 +292,7 @@
 			this.toolStripStatusLabel1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel1.IsLink = true;
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(32, 37);
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(32, 20);
 			this.toolStripStatusLabel1.Tag = "http://iwenli.org";
 			this.toolStripStatusLabel1.Text = "主页";
 			// 
@@ -287,7 +301,7 @@
 			this.toolStripStatusLabel5.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripStatusLabel5.IsLink = true;
 			this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-			this.toolStripStatusLabel5.Size = new System.Drawing.Size(56, 37);
+			this.toolStripStatusLabel5.Size = new System.Drawing.Size(56, 20);
 			this.toolStripStatusLabel5.Tag = "http://wpa.qq.com/msgrd?v=3&uin=234486036&site=qq&menu=yes";
 			this.toolStripStatusLabel5.Text = "给我反馈";
 			// 
@@ -299,11 +313,10 @@
 			this.Controls.Add(this.panel1);
 			this.Controls.Add(this.ts);
 			this.Controls.Add(this.st);
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+			this.Icon = global::Ys.Sdk.Demo.Properties.Resources.favicon;
 			this.Name = "MainForm";
-			this.ShowIcon = false;
-			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
@@ -314,6 +327,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
 			this.splitContainer2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
+			this.groupBox2.ResumeLayout(false);
 			this.gbLog.ResumeLayout(false);
 			this.ts.ResumeLayout(false);
 			this.ts.PerformLayout();
@@ -345,6 +359,7 @@
 		private System.Windows.Forms.RichTextBox txtLog;
 		private System.Windows.Forms.GroupBox groupBox1;
 		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.ListBox listBox1;
+		private System.Windows.Forms.FlowLayoutPanel flpCameraList;
+		private System.Windows.Forms.FlowLayoutPanel flpPlay;
 	}
 }

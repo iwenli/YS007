@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<UpdateInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <AppName>无人超市监控系统</AppName>
+  <AppVersion>1.0.2019.115</AppVersion>
+  <FileExecuteBefore />
+  <ExecuteTimeout>0</ExecuteTimeout>
+  <TreatErrorAsNotUpdated>false</TreatErrorAsNotUpdated>
+  <PromptUserBeforeAutomaticUpgrade>true</PromptUserBeforeAutomaticUpgrade>
+  <AutoCloseSucceedWindow>true</AutoCloseSucceedWindow>
+  <Package>bcae0db75f2040a4986f3fd9dfedd803.zip</Package>
+  <MD5>CC8FBB96733579DB9D9C16B9DFCA5923</MD5>
+  <DeleteMethod>None</DeleteMethod>
+  <PackageSize>75326</PackageSize>
+  <ForceUpdate>false</ForceUpdate>
+  <Packages>
+    <PackageInfo>
+      <FilePath>无人超市监控系统.exe</FilePath>
+      <FileSize>188928</FileSize>
+      <Version>1.0.2019.115</Version>
+      <PackageHash>301D4AA8DE01F6EF065A3D5644DD7234</PackageHash>
+      <PackageName>d19ef55470fd400aafdeeda8928d6229.zip</PackageName>
+      <PackageSize>74847</PackageSize>
+      <Method>VersionCompare</Method>
+      <VerificationLevel>Size Hash</VerificationLevel>
+      <FileHash>BC6D0F963DB023389C7C97C1421C529A</FileHash>
+      <Files>
+        <string>无人超市监控系统.exe</string>
+      </Files>
+    </PackageInfo>
+    <PackageInfo>
+      <FilePath>无人超市监控系统.exe.config</FilePath>
+      <FileSize>725</FileSize>
+      <Version>0.0.0.0</Version>
+      <PackageHash>DEB4A1B21F9F033E5DCF65821641A602</PackageHash>
+      <PackageName>a60ec3d9244d4d809373d94ea47e46de.zip</PackageName>
+      <PackageSize>501</PackageSize>
+      <Method>VersionCompare</Method>
+      <VerificationLevel>Size Hash</VerificationLevel>
+      <FileHash>5DD3DDEF991A59C889CFD6BF43CC4E5D</FileHash>
+      <Files>
+        <string>无人超市监控系统.exe.config</string>
+      </Files>
+    </PackageInfo>
+  </Packages>
+  <HideBeforeExecuteWindow>false</HideBeforeExecuteWindow>
+  <HideAfterExecuteWindow>false</HideAfterExecuteWindow>
+  <MustUpdate>false</MustUpdate>
+  <AutoExitCurrentProcess>false</AutoExitCurrentProcess>
+  <AutoEndProcessesWithinAppDir>true</AutoEndProcessesWithinAppDir>
+  <AutoKillProcesses>false</AutoKillProcesses>
+  <RequreAdminstrorPrivilege>false</RequreAdminstrorPrivilege>
+</UpdateInfo>
