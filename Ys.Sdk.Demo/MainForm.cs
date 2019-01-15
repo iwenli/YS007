@@ -28,6 +28,7 @@ namespace Ys.Sdk.Demo
 		/// 表示用户选择的是几个窗口播放，默认为1   
 		/// </summary>
 		int c = 1;
+		string saftKey = "MAIKE100";
 
 		public MainForm()
 		{
@@ -46,28 +47,29 @@ namespace Ys.Sdk.Demo
 		private async void MainForm_Load(object sender, EventArgs e)
 		{
 			await InitServiceContext();
-			this.Text = ConstParams.AssemblyTitle + string.Format(" V{0}    PowerBy:{1}"
+			Text = ConstParams.AssemblyTitle + string.Format(" V{0}    PowerBy:{1}"
 				, ConstParams.AssemblyVersion.Substring(0, ConstParams.AssemblyVersion.LastIndexOf('.'))
 				, ConstParams.APP_AUTHOR);
 			InitToolbar();
 			InitStatusBar();
-			InitFormControl();
+			InitFormControlAsync();
 			LogService.ShowLog += (msg) =>
 			{
-				AppendLogWarning(txtLog, msg);
+				Log(msg);
 			};
 		}
 
 		/// <summary>
 		/// 主要业务绑定
 		/// </summary>
-		private void InitFormControl()
+		async Task InitFormControlAsync()
 		{
-			ResetPalyBox();
-			flpPlay.Resize += (s, e) => { ResetPalyBox(); };
+			ResetPalyBoxAsync();
+			flpPlay.Resize += async (s, e) => { await ResetPalyBoxAsync(); };
 			YsAction.OnSubscribe += (e, s) =>
 			{
-				Log(s.ToJson());
+				picbox[j].Image = null;
+				Log(s.ToString());
 			};
 		}
 
@@ -154,7 +156,7 @@ namespace Ys.Sdk.Demo
 					EndOperation("缓存更新完成...");
 					//TODO:渲染设备列表
 					BeginOperation("开始渲染设备列表...", 0, true);
-					await InitCameraAsync();
+					await InitCameraListAsync();
 					EndOperation("设备列表渲染完成...");
 				}
 				catch (Exception ex)
@@ -213,7 +215,7 @@ namespace Ys.Sdk.Demo
 		/// <param name="opName">当前操作的名称</param>
 		/// <param name="maxItemsCount">当前操作如果需要显示进度，那么提供任务总数；不提供则为跑马灯等待</param>
 		/// <param name="disableForm">是否禁用当前窗口的操作</param>
-		void BeginOperation(string opName = "正在操作，请稍等...", int maxItemsCount = 100, bool disableForm = false)
+		void BeginOperation(string opName = "正在操作，请稍等...", int maxItemsCount = 0, bool disableForm = true)
 		{
 			stStatus.Text = opName;
 			Log(stStatus.Text);
@@ -254,7 +256,11 @@ namespace Ys.Sdk.Demo
 			AppendLog(txtLog, msg);
 		}
 
-		async Task InitCameraAsync()
+		/// <summary>
+		/// 初始化监控列表
+		/// </summary>
+		/// <returns></returns>
+		async Task InitCameraListAsync()
 		{
 			await Task.Run(() =>
 			{
@@ -301,88 +307,73 @@ namespace Ys.Sdk.Demo
 		int d = 0;
 		private void picbox_MouseClick(object sender, MouseEventArgs e)
 		{
-			PictureBox picb1 = sender as PictureBox;//取出点击的控件sender
-			if (picb1 == null)//点击则非空，否则为空
+			var pictureBox = sender as PictureBox;//取出点击的控件sender
+			if (pictureBox == null)//点击则非空，否则为空
 			{
 				return;
 			}
-			var cameraId = picb1.Tag.ToString();
-			if (c > 1)
+			var cameraId = pictureBox.Tag.ToString();
+			var camera = _context.CacheContext.Data.CameraList.Find(m => m.CameraId == cameraId);
+			if (camera.IsNull())
 			{
-				if (PlayCameraId.Contains(cameraId))
-				{
-					IS("该视频已经在播放中，请勿重复点击！");
-					return;
-				}
+				EM("不存在的设备！");
+				return;
 			}
-			else
+			if (camera.Status != 1)
 			{
-
+				EM("设备不在线，无法播放！");
+				return;
 			}
-			if (c == 1)//单画面
+			if (PlayCameraId.Contains(cameraId))
 			{
-				handle[0] = picbox[0].Handle;
-				if (a == 1)
-				{
-					bool close = YsAction.Stop(SessionId[j]);
-				}
-				PlayCameraId[j] = cameraId;
-				Play(c);
+				IS("该视频已经在播放中，请勿重复点击！");
+				return;
+			}
+			handle[j] = picbox[j].Handle;//赋予句柄
+			if (a == 1 && d == 1)//全部容器都在播放
+			{
+				bool close = YsAction.Stop(SessionId[j]);//关闭最开始打开的画面
+			}
+			PlayCameraId[j] = cameraId;
+			Play(j);
+			if (j < c - 1)
+			{
+				j++;
+			}
+			else if (j == c - 1)
+			{
 				j = 0;
+				d = 1;
 			}
-			//else if (c == 4)//4画面
-			//{
-			//	handle[j] = picbox[j].Handle;
-			//	if (a == 1 && d == 1)
-			//	{
-			//		bool close = HkAction.Stop(SessionId[j]);
-			//	}
-			//	Start_Play4();
-			//	if (j < 3)
-			//	{
-			//		j++;
-			//	}
-			//	else if (j == 3)
-			//	{
-			//		j = 0;
-			//		d = 1;
-			//	}
-			//}
-			//else if (c == 9)//9画面
-			//{
-			//	//picbox[j].Image = Image.FromFile("60.gif");//未成功播放前显示加载动态图
-			//	//picbox[j].SizeMode = PictureBoxSizeMode.CenterImage;//图片居中
-			//	handle[j] = picbox[j].Handle;//赋予句柄
-			//	if (a == 1 && d == 1)//全部容器都在播放
-			//	{
-			//		bool close = HkAction.Stop(SessionId[j]);//关闭最开始打开的画面
-			//	}
-			//	Start_Play9();
-			//	if (j < 8)
-			//	{
-			//		j++;
-			//	}
-			//	else if (j == 8)
-			//	{
-			//		j = 0;
-			//		d = 1;
-			//	}
-			//}
 		}
 
 		/// <summary>
+		/// 播放 异步
+		/// </summary>
+		/// <param name="boxCount"></param>
+		/// <returns></returns>
+		async Task PlayAsync(int index)
+		{
+			BeginOperation($"准备播放");
+			await RunAsync(() =>
+			{
+				Play(index);
+			});
+			EndOperation();
+		}
+		/// <summary>
 		/// 播放
 		/// </summary>
-		/// <param name="winCount"></param>
-		void Play(int winCount = 1)
+		/// <param name="index"></param>
+		void Play(int index = 0)
 		{
-			SessionId[j] = YsAction.AllocSession();//每次点击存放session
-			if (SessionId[j] != null)//每次播放申请会话
+			SessionId[index] = YsAction.AllocSession();
+			if (SessionId[index] != null)
 			{
-				bool play;
+				picbox[index].Image = Resources.load2;
 				try
 				{
-					play = YsAction.Play(handle[0], SessionId[j], PlayCameraId[j]);
+					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index]);
 					if (play == true)
 					{
 						a = 1;
@@ -398,54 +389,52 @@ namespace Ys.Sdk.Demo
 				IS("申请会话异常!");
 			}
 		}
+		#endregion
 		#region 创建播放容器并添加双击事件
-		private void ResetPalyBox()
+		async Task ResetPalyBoxAsync()
 		{
+			BeginOperation("开始创建播放容器");
+			await RunAsync(() =>
+			{
+				ResetPalyBox();
+			});
+			EndOperation("播放容器创建完毕");
+		}
+		void ResetPalyBox()
+		{
+			if (flpPlay.InvokeRequired)
+			{
+				flpPlay.Invoke(new Action(
+					() =>
+					{
+						ResetPalyBox();
+					}
+				));
+				return;
+			}
 			flpPlay.Controls.Clear();//清楚所有容器
 			var _rolOrColCount = (int)Math.Sqrt(c);
-			var height = (flpPlay.Height - _rolOrColCount) / _rolOrColCount;
-			var width = (flpPlay.Width - _rolOrColCount) / _rolOrColCount;
+			var height = (flpPlay.Height - _rolOrColCount * 5) / _rolOrColCount;
+			var width = (flpPlay.Width - _rolOrColCount * 5) / _rolOrColCount;
 			for (int i = 0; i < c; i++)
 			{
-				PictureBox pic = new PictureBox();
-				pic.BackColor = Color.Black;
-				pic.Size = new Size(width, height);//指定播放容器大小4画面
-				pic.Name = "picBox" + i;
-				flpPlay.Controls.Add(pic);//创建播放容器 
-				picbox[i] = pic;
-				handle[i] = picbox[0].Handle;
-				pic.Margin = new Padding(1);
-				//picbox[i].MouseDoubleClick += new MouseEventHandler(picbox_MouseDoubleClick);//添加鼠标双击击事件，用于全屏播放
+				var pictureBox = new PictureBox
+				{
+					BackColor = Color.Black,
+					Size = new Size(width, height),//指定播放容器大小4画面
+					Name = "picBox" + i,
+					Tag = i,
+					SizeMode = PictureBoxSizeMode.CenterImage
+				};
+				flpPlay.Controls.Add(pictureBox);//创建播放容器 
+				picbox[i] = pictureBox;
+				handle[i] = picbox[i].Handle;
+				pictureBox.Margin = new Padding(1);
+				picbox[i].MouseDoubleClick += new MouseEventHandler(picbox_MouseDoubleClick);//添加鼠标双击击事件，用于全屏播放
 			}
-			//if (c == 1)//单画面只需创建一个容器即可
-			//{
-
-			//}
-			//else//多画面时根据C的值创建容器
-			//{
-			//	for (int i = 0; i < c; i++)
-			//	{
-			//		PictureBox pic = new PictureBox();
-			//		if (c == 4)
-			//		{
-			//			pic.Size = new Size(470, 330);//指定播放容器大小4画面
-			//		}
-			//		else
-			//		{
-			//			pic.Size = new Size(312, 218);//指定播放容器大小9画面
-			//		}
-			//		pic.BackColor = Color.Black;
-			//		pic.Name = "picBox" + i.ToString();
-			//		this.flowLayoutPanel1.Controls.Add(pic);//创建播放容器 
-			//		picbox[i] = pic;
-			//		handle[i] = picbox[i].Handle;
-			//		pic.Margin = new System.Windows.Forms.Padding(1);
-			//		picbox[i].MouseDoubleClick += new MouseEventHandler(picbox_MouseDoubleClick);
-			//	}
-			//}
 		}
 		#endregion
-		#endregion
+
 		#region 鼠标停在摄像头缩略图上显示播放图标
 		private void picbox_MouseHover(object sender, EventArgs e)
 		{
@@ -457,6 +446,7 @@ namespace Ys.Sdk.Demo
 			}
 		}
 		#endregion
+
 		#region 鼠标离开时清除播放图片，重新显示缩略图
 		private void picbox_MouseLeave(object sender, EventArgs e)
 		{
@@ -465,6 +455,32 @@ namespace Ys.Sdk.Demo
 			{
 				pictureBox.Image = null;
 			}
+		}
+		#endregion
+
+		#region 双击跳转到全屏显示窗口
+		private void picbox_MouseDoubleClick(object sender, EventArgs e)
+		{
+			PictureBox picb1 = sender as PictureBox;//取出点击的控件sender
+			if (picb1.IsNull())
+			{
+				EM("请重试");
+				return;
+			}
+			var index = Convert.ToInt32(picb1.Tag);
+			var cameraId = PlayCameraId[index];
+			if (string.IsNullOrEmpty(cameraId))
+			{
+				EM("无视频");
+				return;
+			}
+			YsAction.Stop(SessionId[index]);//关闭当前所有正在播放的该摄像头
+			var frm = new FullCamera(cameraId, SessionId[index], 2, saftKey);
+			frm.FormClosed += async (s, args) =>
+			{
+				await PlayAsync(index);
+			};
+			frm.ShowDialog();
 		}
 		#endregion
 	}

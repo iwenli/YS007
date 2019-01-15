@@ -39,6 +39,7 @@ namespace Ys.Sdk.Demo.Forms
 		{
 			txtMobile.SetHintText("手机号");
 			txtMobileCode.SetHintText("验证码");
+			btnOk.Enabled = false;
 			btnOk.Click += BtnClick;
 			btnSendCode.Click += BtnClick;
 			txtMobile.Text = "11111498451";
@@ -135,6 +136,7 @@ namespace Ys.Sdk.Demo.Forms
 				else
 				{
 					_serverVerityCode = sendResult.MobileVerify;
+					btnOk.Enabled = true;
 					_timer.Enabled = true;
 					_timer.Start();
 				}

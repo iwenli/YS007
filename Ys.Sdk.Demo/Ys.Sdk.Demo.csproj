@@ -105,6 +105,9 @@
     <Compile Include="Common\SerializeExtension.cs" />
     <Compile Include="Common\VerifyExtention.cs" />
     <Compile Include="Common\ZipHelper.cs" />
+    <Compile Include="Controls\CameraBox.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="Core\SubscribeEventArgs.cs" />
     <Compile Include="Core\YsSDK.cs" />
     <Compile Include="Core\YsAction.cs" />
@@ -114,6 +117,12 @@
     </Compile>
     <Compile Include="FormBase.Designer.cs">
       <DependentUpon>FormBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FullCamera.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FullCamera.Designer.cs">
+      <DependentUpon>FullCamera.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\Login.cs">
       <SubType>Form</SubType>
@@ -159,6 +168,9 @@
     <EmbeddedResource Include="FormBase.resx">
       <DependentUpon>FormBase.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FullCamera.resx">
+      <DependentUpon>FullCamera.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Login.resx">
       <DependentUpon>Login.cs</DependentUpon>
     </EmbeddedResource>
@@ -176,7 +188,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-    <None Include="Ys.Sdk.Demo_TemporaryKey.pfx" />
+    <None Include="Tx.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\info_16.png" />
@@ -212,9 +226,7 @@
     <Content Include="Lib\NetStream.dll" />
     <Content Include="Lib\OpenAL32.dll" />
     <Content Include="Lib\OpenAL32New.dll" />
-    <Content Include="Lib\OpenNetStream.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <Content Include="Lib\OpenNetStream.dll" />
     <Content Include="Lib\opensslwrap.dll" />
     <Content Include="Lib\paho-mqtt3c.dll" />
     <Content Include="Lib\PlayCtrl.dll" />
@@ -229,6 +241,11 @@
     <Content Include="Lib\udt.dll" />
     <Content Include="Lib\YUVProcess.dll" />
     <Content Include="logo.ico" />
+    <None Include="Resources\load1.gif" />
+    <None Include="Resources\load2.gif" />
+    <None Include="Resources\120.gif" />
+    <None Include="Resources\90.gif" />
+    <None Include="Resources\60.gif" />
     <None Include="Resources\favicon.ico" />
     <None Include="Resources\2.png" />
     <None Include="Resources\homeDevice.jpeg" />

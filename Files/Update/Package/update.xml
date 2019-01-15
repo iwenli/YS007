@@ -7,36 +7,36 @@
   <TreatErrorAsNotUpdated>false</TreatErrorAsNotUpdated>
   <PromptUserBeforeAutomaticUpgrade>true</PromptUserBeforeAutomaticUpgrade>
   <AutoCloseSucceedWindow>true</AutoCloseSucceedWindow>
-  <Package>bcae0db75f2040a4986f3fd9dfedd803.zip</Package>
-  <MD5>CC8FBB96733579DB9D9C16B9DFCA5923</MD5>
+  <Package>ec5f9ba39987430683f6c192372e6923.zip</Package>
+  <MD5>BA0B3397DEB8F98D1EEE0314A18946B0</MD5>
   <DeleteMethod>None</DeleteMethod>
-  <PackageSize>75326</PackageSize>
+  <PackageSize>75344</PackageSize>
   <ForceUpdate>false</ForceUpdate>
   <Packages>
     <PackageInfo>
       <FilePath>无人超市监控系统.exe</FilePath>
       <FileSize>188928</FileSize>
       <Version>1.0.2019.115</Version>
-      <PackageHash>301D4AA8DE01F6EF065A3D5644DD7234</PackageHash>
-      <PackageName>d19ef55470fd400aafdeeda8928d6229.zip</PackageName>
-      <PackageSize>74847</PackageSize>
+      <PackageHash>1D85E101218009B5CFC6CDD609D3B6D5</PackageHash>
+      <PackageName>6946a3bafe224fe19d41da080d92e463.zip</PackageName>
+      <PackageSize>74845</PackageSize>
       <Method>VersionCompare</Method>
       <VerificationLevel>Size Hash</VerificationLevel>
-      <FileHash>BC6D0F963DB023389C7C97C1421C529A</FileHash>
+      <FileHash>418C3DAF96D780D5171E6968120F4D59</FileHash>
       <Files>
         <string>无人超市监控系统.exe</string>
       </Files>
     </PackageInfo>
     <PackageInfo>
       <FilePath>无人超市监控系统.exe.config</FilePath>
-      <FileSize>725</FileSize>
+      <FileSize>760</FileSize>
       <Version>0.0.0.0</Version>
-      <PackageHash>DEB4A1B21F9F033E5DCF65821641A602</PackageHash>
-      <PackageName>a60ec3d9244d4d809373d94ea47e46de.zip</PackageName>
-      <PackageSize>501</PackageSize>
+      <PackageHash>AE7C0D154DA008192D97C2944A24B147</PackageHash>
+      <PackageName>c3dcb9ed28424cee98fc6303606bd8af.zip</PackageName>
+      <PackageSize>521</PackageSize>
       <Method>VersionCompare</Method>
       <VerificationLevel>Size Hash</VerificationLevel>
-      <FileHash>5DD3DDEF991A59C889CFD6BF43CC4E5D</FileHash>
+      <FileHash>7E6715DB7D3E2C5E3EFE52AC258F538E</FileHash>
       <Files>
         <string>无人超市监控系统.exe.config</string>
       </Files>

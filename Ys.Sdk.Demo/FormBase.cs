@@ -34,6 +34,10 @@ namespace Ys.Sdk.Demo
 		}
 
 		#region 内部函数
+		protected async Task RunAsync(Action task)
+		{
+			await Task.Run(task);
+		}
 		/// <summary>
 		/// 追加警告
 		/// </summary>
@@ -105,8 +109,8 @@ namespace Ys.Sdk.Demo
 				}));
 				return;
 			}
-			string timeL = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-			txtLog.AppendText(timeL + " => ");
+			string timeL = DateTime.Now.ToString("HH:mm:ss");
+			txtLog.AppendText(timeL + "=>");
 			if (args == null || args.Length == 0)
 			{
 				txtLog.AppendText(message);
