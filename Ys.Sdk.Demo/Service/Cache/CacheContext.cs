@@ -109,6 +109,13 @@ namespace Ys.Sdk.Demo.Service.Cache
 				}
 				//更新监控
 				//Data.CameraList = YsAction.GetCameraList();
+				foreach (var device in Data.DeviceList)
+				{
+					if (device.DeviceType == 1)
+					{
+						device.CameraList = YsAction.GetCameraList(device.Info);
+					}
+				}
 				Data.LastUpdateTime = DateTime.Now;
 				Save();
 				return true;

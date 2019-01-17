@@ -53,7 +53,7 @@ namespace Ys.Sdk.Demo
 			InitToolbar();
 			InitStatusBar();
 			InitFormControlAsync();
-			LogService.ShowLog += (msg) =>
+			LogService.ShowLog += async (msg) =>
 			{
 				Log(msg);
 			};
@@ -64,7 +64,7 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		async Task InitFormControlAsync()
 		{
-			ResetPalyBoxAsync();
+			await ResetPalyBoxAsync();
 			flpPlay.Resize += async (s, e) => { await ResetPalyBoxAsync(); };
 			YsAction.OnSubscribe += (e, s) =>
 			{
@@ -241,7 +241,7 @@ namespace Ys.Sdk.Demo
 		{
 			T("InitSdk", YsAction.InitSdk());
 			T(YsAction.GetAccessToken());
-			var _list = YsAction.GetCameraList();
+			var _list = YsAction.GetCameraList("C04104941");
 			T("DisposeSdk", YsAction.DisposeSdk());
 		}
 
@@ -264,35 +264,51 @@ namespace Ys.Sdk.Demo
 		{
 			await Task.Run(() =>
 			{
-				var _serials = _context.CacheContext.Data.DeviceList.FindAll(m => m.DeviceType == 1).Select(m => m.Info).ToList();
-				var _cameraList = _context.CacheContext.Data.CameraList.FindAll(m => _serials.Contains(m.DeviceSerial));
-				foreach (var camera in _cameraList)
+				var deviceList = _context.CacheContext.Data.DeviceList.FindAll(m => m.DeviceType == 1);
+				foreach (var device in deviceList)
 				{
-					var lbl1 = new Label();
-					lbl1.Text = $"{camera.DeviceName}({camera.DeviceSerial})-{camera.CameraName}"; //摄像头名字
-					Label lbl2 = new Label();
-					lbl2.Text = $"加密状态:{(camera.IsEncrypt == 1 ? "启用" : "未启用")}";
-					Label lbl3 = new Label();
-					lbl3.Text = $"在线状态:{(camera.Status == 1 ? "在线" : "不在线")}";
-					var pic = new PictureBox();
-					pic.Size = new Size(120, 120);
-					pic.Tag = camera.CameraId;
-					pic.Name = "pic_" + pic.Tag;
-					pic.BackgroundImage = Resources.homeDevice;// Image.FromStream(WebRequest.Create(camera.PicUrl).GetResponse().GetResponseStream());//取网络图片
-					pic.BackgroundImageLayout = ImageLayout.Stretch;//背景图自适应控件大小
-					pic.MouseClick += new MouseEventHandler(picbox_MouseClick);//添加鼠标点击事件，方便后面确定点击的是哪个摄像头              
-					pic.MouseHover += new System.EventHandler(picbox_MouseHover);
-					pic.MouseLeave += new System.EventHandler(picbox_MouseLeave);
-
-					if (flpCameraList.InvokeRequired)
+					var store = _context.CacheContext.Data.StoreList.Find(m => m.StoreId == device.StoreId);
+					foreach (var camera in device.CameraList)
 					{
-						flpCameraList.Invoke(new Action(() =>
+						var lbl0 = new Label()
 						{
-							flpCameraList.Controls.Add(pic);//添加控件picturebox
-							flpCameraList.Controls.Add(lbl1);//添加控件label
-							flpCameraList.Controls.Add(lbl2);//添加控件label
-							flpCameraList.Controls.Add(lbl3);//添加控件label
-						}));
+							Text = $"{store.StoreName}",
+							AutoSize = true
+						};
+						var lbl1 = new Label()
+						{
+							Text = $"{camera.DeviceName}-{camera.CameraName}",
+							AutoSize = true
+						};
+						var lbl2 = new Label()
+						{
+							Text = $"加密状态:{(camera.IsEncrypt == 1 ? "启用" : "未启用")}"
+						};
+						var lbl3 = new Label()
+						{
+							Text = $"在线状态:{(camera.Status == 1 ? "在线" : "不在线")}"
+						};
+						var pic = new PictureBox();
+						pic.Size = new Size(120, 120);
+						pic.Tag = camera.CameraId;
+						pic.Name = "pic_" + pic.Tag;
+						pic.BackgroundImage = Resources.homeDevice;// Image.FromStream(WebRequest.Create(camera.PicUrl).GetResponse().GetResponseStream());//取网络图片
+						pic.BackgroundImageLayout = ImageLayout.Stretch;//背景图自适应控件大小
+						pic.MouseClick += new MouseEventHandler(picbox_MouseClick);//添加鼠标点击事件，方便后面确定点击的是哪个摄像头              
+						pic.MouseHover += new System.EventHandler(picbox_MouseHover);
+						pic.MouseLeave += new System.EventHandler(picbox_MouseLeave);
+
+						if (flpCameraList.InvokeRequired)
+						{
+							flpCameraList.Invoke(new Action(() =>
+							{
+								flpCameraList.Controls.Add(pic);//添加控件picturebox
+								flpCameraList.Controls.Add(lbl0);//添加控件label
+								flpCameraList.Controls.Add(lbl1);//添加控件label
+								flpCameraList.Controls.Add(lbl2);//添加控件label
+								flpCameraList.Controls.Add(lbl3);//添加控件label
+							}));
+						}
 					}
 				}
 			});
@@ -313,7 +329,7 @@ namespace Ys.Sdk.Demo
 				return;
 			}
 			var cameraId = pictureBox.Tag.ToString();
-			var camera = _context.CacheContext.Data.CameraList.Find(m => m.CameraId == cameraId);
+			var camera = _context.CacheContext.Data.DeviceList.SelectMany(m => m.CameraList).FirstOrDefault(m => m.CameraId == cameraId);
 			if (camera.IsNull())
 			{
 				EM("不存在的设备！");

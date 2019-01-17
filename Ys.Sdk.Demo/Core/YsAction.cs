@@ -122,7 +122,31 @@ namespace Ys.Sdk.Demo.Core
 			}
 			return _list;
 		}
-
+		/// <summary>
+		/// 获取监控列表
+		/// </summary>
+		/// <param name="deviceSerial"></param>
+		/// <returns></returns>
+		public static List<CameraInfo> GetCameraList(string deviceSerial)
+		{
+			var _list = new List<CameraInfo>();
+			try
+			{
+				IntPtr _hander;
+				int _len;
+				if (YsSDK.OpenSDK_Data_GetDeviceInfo(AccessToken, deviceSerial, out _hander, out _len) == 0)
+				{
+					var _response = Marshal.PtrToStringAnsi(_hander);
+					var _result = _response.FromJson<SingleDeviceCameraListResponse>();
+					_list.AddRange(_result?.CameraList);
+				}
+			}
+			catch (Exception ex)
+			{
+				LogService.AppendErrorLog(typeof(YsAction), $"获取设备[deviceSerial={deviceSerial}]列表异常", ex);
+			}
+			return _list;
+		}
 
 		/// <summary>
 		/// 获取请求参数

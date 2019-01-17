@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Txooo.Extension.Extension;
+using Ys.Sdk.Demo.Service.Entities.Ys;
 
 namespace Ys.Sdk.Demo.Service.Entities
 {
@@ -197,6 +198,11 @@ namespace Ys.Sdk.Demo.Service.Entities
 				return m_errList;
 			}
 		}
+
+		/// <summary>
+		/// 监控设备的监控集合
+		/// </summary>
+		public List<CameraInfo> CameraList { get; set; } = new List<CameraInfo>();
 	}
 
 	/// <summary>

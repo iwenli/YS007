@@ -31,10 +31,10 @@ namespace Ys.Sdk.Demo.Service.Cache
 		/// </summary>
 		public List<StoreInfo> StoreList { get; set; }
 
-		/// <summary>
-		/// 监控列表
-		/// </summary>
-		public List<CameraInfo> CameraList { get; set; }
+		///// <summary>
+		///// 监控列表
+		///// </summary>
+		//public List<CameraInfo> CameraList { get; set; }
 
 		public CacheData()
 		{
