@@ -11,8 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Txooo.Extension;
 using Ys.Sdk.Demo.Common;
-using Ys.Sdk.Demo.Service.Entities.Ys;
-using Ys.Sdk.Demo.Service.Entities.Ys.Response;
+using Ys.Sdk.Demo.Core.Entities;
+using Ys.Sdk.Demo.Core.Entities.Response;
 
 namespace Ys.Sdk.Demo.Core
 {
@@ -75,15 +75,16 @@ namespace Ys.Sdk.Demo.Core
 			string _cmd = GetCommond("token");
 			if (YsSDK.OpenSDK_HttpSendWithWait(Cfg.ApiUrl, _cmd, "", out iMessage, out iLength) == 0)
 			{
-				JObject result = (JObject)JsonConvert.DeserializeObject(Marshal.PtrToStringAnsi(iMessage, iLength));
-				if (result["result"]["code"].ToString() == "200")
+				var _rmsg = Marshal.PtrToStringAnsi(iMessage);
+				var _result = _rmsg.FromJson<ResponseResult<TokenResponse>>();
+				if (_result.Result.IsSuccess)
 				{
-					Cfg.AccessToken = result["result"]["data"]["accessToken"].ToString();
+					Cfg.AccessToken = _result.Result.Data.AccessToken;
 					Debug.WriteLine(Cfg.AccessToken);
 				}
 				else
 				{
-					Debug.WriteLine(result["result"]["code"].ToString());
+					Debug.WriteLine(_result.Result.ErrorMsg);
 				}
 			}
 			return Cfg.AccessToken;
@@ -137,8 +138,8 @@ namespace Ys.Sdk.Demo.Core
 				if (YsSDK.OpenSDK_Data_GetDeviceInfo(AccessToken, deviceSerial, out _hander, out _len) == 0)
 				{
 					var _response = Marshal.PtrToStringAnsi(_hander);
-					var _result = _response.FromJson<SingleDeviceCameraListResponse>();
-					_list.AddRange(_result?.CameraList);
+					var _result = _response.FromJson<ResponseResult<SingleDeviceCameraListResponse>>();
+					_list.AddRange(_result?.Result?.Data);
 				}
 			}
 			catch (Exception ex)

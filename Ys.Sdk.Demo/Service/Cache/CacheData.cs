@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Ys.Sdk.Demo.Service.Entities;
 using Ys.Sdk.Demo.Service.Entities.User;
-using Ys.Sdk.Demo.Service.Entities.Ys;
 
 namespace Ys.Sdk.Demo.Service.Cache
 {
@@ -31,13 +30,18 @@ namespace Ys.Sdk.Demo.Service.Cache
 		/// </summary>
 		public List<StoreInfo> StoreList { get; set; }
 
+		/// <summary>
+		/// 萤石云安全key
+		/// </summary>
+		public string SafeKye => LoginInfo?.ComId == 549250 ? "SUMAO100" : "MAIKE100";
+
 		///// <summary>
 		///// 监控列表
 		///// </summary>
 		//public List<CameraInfo> CameraList { get; set; }
 
 		public CacheData()
-		{
+		{ 
 		}
 	}
 }

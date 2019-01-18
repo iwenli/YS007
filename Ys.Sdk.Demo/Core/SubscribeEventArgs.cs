@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using Ys.Sdk.Demo.Core.Entities;
 
 namespace Ys.Sdk.Demo.Core
 {
@@ -43,10 +44,13 @@ namespace Ys.Sdk.Demo.Core
 		/// </summary>
 		public string UserId => Marshal.PtrToStringAnsi(m_user);
 
+		public string ErrorMsg => YsError.ErrorCodeErrorDictionary?[Error] ?? "";
+		public string ErrorMsg1 => "";// YsError.MessageInfoErrorDictionary?[Info] ?? "";
+
 		public override string ToString()
 		{
-			var action = MsgType == 3 ? "播放开始" : MsgType == 4 ? "播放终止" : MsgType == 5 ? "回放结束" : $"未知操作[{MsgType}]";
-			return $"用户[{UserId}]-会话[{SessionId}]的视频[{action}]";
+			var action = MsgType == 3 ? "播放开始" : MsgType == 4 ? "播放终止" : MsgType == 5 ? "回放结束" : $"未知操作";
+			return $"用户[{UserId}]-会话[{SessionId}]的视频[{action}[{MsgType}]] {ErrorMsg1} {ErrorMsg}";
 		}
 	}
 }

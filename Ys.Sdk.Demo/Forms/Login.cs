@@ -42,8 +42,9 @@ namespace Ys.Sdk.Demo.Forms
 			btnOk.Enabled = false;
 			btnOk.Click += BtnClick;
 			btnSendCode.Click += BtnClick;
-			txtMobile.Text = "11111498451";
-			txtMobileCode.Text = "498451";
+			var _brandId = 497863;  //498451
+			txtMobile.Text = "11111" + _brandId;
+			txtMobileCode.Text = _brandId.ToString();
 
 			_timer.Interval = 1000;
 			_timer.Tick += (s, e) =>

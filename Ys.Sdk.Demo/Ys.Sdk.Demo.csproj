@@ -108,7 +108,13 @@
     <Compile Include="Controls\CameraBox.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Core\Entities\CameraInfo.cs" />
+    <Compile Include="Core\Entities\Response\Base.cs" />
+    <Compile Include="Core\Entities\Response\CameraListResponse.cs" />
+    <Compile Include="Core\Entities\Response\ResponseResult.cs" />
+    <Compile Include="Core\Entities\Response\TokenResponse.cs" />
     <Compile Include="Core\SubscribeEventArgs.cs" />
+    <Compile Include="Core\Entities\YsError.cs" />
     <Compile Include="Core\YsSDK.cs" />
     <Compile Include="Core\YsAction.cs" />
     <Compile Include="Core\YsCfg.cs" />
@@ -147,9 +153,6 @@
     <Compile Include="Service\Entities\Response\VerifyCodeResponse.cs" />
     <Compile Include="Service\Entities\StoreInfo.cs" />
     <Compile Include="Service\Entities\User\BrandInfo.cs" />
-    <Compile Include="Service\Entities\Ys\CameraInfo.cs" />
-    <Compile Include="Service\Entities\Ys\Response\CameraListResponse.cs" />
-    <Compile Include="Service\Entities\Ys\Response\ResponseBase.cs" />
     <Compile Include="Service\Http\DeviceService.cs" />
     <Compile Include="Service\Http\HttpSignClient.cs" />
     <Compile Include="Service\Http\PassportService.cs" />

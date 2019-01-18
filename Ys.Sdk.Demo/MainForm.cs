@@ -28,7 +28,6 @@ namespace Ys.Sdk.Demo
 		/// 表示用户选择的是几个窗口播放，默认为1   
 		/// </summary>
 		int c = 1;
-		string saftKey = "MAIKE100";
 
 		public MainForm()
 		{
@@ -144,7 +143,7 @@ namespace Ys.Sdk.Demo
 		async Task LoginedChanged()
 		{
 			tsLogin.Enabled = !(splitContainer2.Enabled = tsLogout.Enabled = _context.Session.IsLogined);
-			tsLogin.Text = _context.Session.IsLogined ? string.Format("已登录为【{0} ({1})】", _context.Session.LoginInfo.Mobile, _context.Session.LoginInfo.UserId) : "登录(&I)";
+			tsLogin.Text = _context.Session.IsLogined ? string.Format("已登录为【{0} ({1})】", _context.Session.LoginInfo.Mobile, _context.Session.LoginInfo.BrandList.FirstOrDefault().BrandName) : "登录(&I)";
 			if (_context.Session.IsLogined)
 			{
 				Log("登录成功...");
@@ -242,6 +241,7 @@ namespace Ys.Sdk.Demo
 			T("InitSdk", YsAction.InitSdk());
 			T(YsAction.GetAccessToken());
 			var _list = YsAction.GetCameraList("C04104941");
+			 _list = YsAction.GetCameraList();
 			T("DisposeSdk", YsAction.DisposeSdk());
 		}
 
@@ -295,8 +295,8 @@ namespace Ys.Sdk.Demo
 						pic.BackgroundImage = Resources.homeDevice;// Image.FromStream(WebRequest.Create(camera.PicUrl).GetResponse().GetResponseStream());//取网络图片
 						pic.BackgroundImageLayout = ImageLayout.Stretch;//背景图自适应控件大小
 						pic.MouseClick += new MouseEventHandler(picbox_MouseClick);//添加鼠标点击事件，方便后面确定点击的是哪个摄像头              
-						pic.MouseHover += new System.EventHandler(picbox_MouseHover);
-						pic.MouseLeave += new System.EventHandler(picbox_MouseLeave);
+						pic.MouseHover += new EventHandler(picbox_MouseHover);
+						pic.MouseLeave += new EventHandler(picbox_MouseLeave);
 
 						if (flpCameraList.InvokeRequired)
 						{
@@ -351,7 +351,7 @@ namespace Ys.Sdk.Demo
 				bool close = YsAction.Stop(SessionId[j]);//关闭最开始打开的画面
 			}
 			PlayCameraId[j] = cameraId;
-			Play(j);
+			PlayAsync(j);
 			if (j < c - 1)
 			{
 				j++;
@@ -389,7 +389,7 @@ namespace Ys.Sdk.Demo
 				picbox[index].Image = Resources.load2;
 				try
 				{
-					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index]);
+					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index], 0, _context.CacheContext.Data.SafeKye);
 					if (play == true)
 					{
 						a = 1;
@@ -491,7 +491,7 @@ namespace Ys.Sdk.Demo
 				return;
 			}
 			YsAction.Stop(SessionId[index]);//关闭当前所有正在播放的该摄像头
-			var frm = new FullCamera(cameraId, SessionId[index], 2, saftKey);
+			var frm = new FullCamera(cameraId, SessionId[index], 3, _context.CacheContext.Data.SafeKye);
 			frm.FormClosed += async (s, args) =>
 			{
 				await PlayAsync(index);
