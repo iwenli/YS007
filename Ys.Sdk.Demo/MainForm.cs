@@ -389,7 +389,7 @@ namespace Ys.Sdk.Demo
 				picbox[index].Image = Resources.load2;
 				try
 				{
-					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index], 0, _context.CacheContext.Data.SafeKye);
+					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index], 2, _context.CacheContext.Data.SafeKye);
 					if (play == true)
 					{
 						a = 1;
@@ -406,6 +406,7 @@ namespace Ys.Sdk.Demo
 			}
 		}
 		#endregion
+
 		#region 创建播放容器并添加双击事件
 		async Task ResetPalyBoxAsync()
 		{

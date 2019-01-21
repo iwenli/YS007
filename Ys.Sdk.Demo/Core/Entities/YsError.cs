@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Ys.Sdk.Demo.Core.Entities
 {
-	public  class YsError
+	/// <summary>
+	/// 错误码
+	/// https://open.ys7.com/doc/zh/book/pc/pc_errorcode.html
+	/// </summary>
+	public class YsError
 	{
 		/// <summary>
 		/// 根据appKey和secret获取accessToken错误码信息

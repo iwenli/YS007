@@ -45,7 +45,7 @@ namespace Ys.Sdk.Demo.Core
 		public string UserId => Marshal.PtrToStringAnsi(m_user);
 
 		public string ErrorMsg => YsError.ErrorCodeErrorDictionary?[Error] ?? "";
-		public string ErrorMsg1 => "";// YsError.MessageInfoErrorDictionary?[Info] ?? "";
+		public string ErrorMsg1 => YsError.MessageInfoErrorDictionary?[Info] ?? "";
 
 		public override string ToString()
 		{
