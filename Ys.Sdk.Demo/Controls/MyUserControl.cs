@@ -1,44 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Txooo.Extension;
-using Ys.Sdk.Demo.Common;
-using Ys.Sdk.Demo.Properties;
 using Ys.Sdk.Demo.Service;
+using Txooo.Extension;
 
-namespace Ys.Sdk.Demo
+namespace Ys.Sdk.Demo.Controls
 {
-	public partial class FormBase : Form
+	public partial class MyUserControl : UserControl
 	{
-		/// <summary>
-		/// 获得当前的上下文
-		/// </summary>
-		protected ServiceContext _context;
-		/// <summary>
-		/// 当前日志显示控件
-		/// </summary>
-		protected RichTextBox RichTextBox { get; set; }
+		protected readonly ServiceContext context;
+		protected RichTextBox RichTextBox { get; private set; }
 
-		public FormBase(ServiceContext serviceContext)
+		public MyUserControl(ServiceContext context, RichTextBox richTextBox)
 		{
-			_context = serviceContext;
+			InitializeComponent();
+			this.context = context;
+			this.RichTextBox = richTextBox;
 		}
 
-		/// <summary>
-		/// 构造函数
-		/// </summary>
-		public FormBase()
+		public MyUserControl()
 		{
 
 		}
 
-		#region 内部函数
+		#region 扩展
 		protected async Task RunAsync(Action task)
 		{
 			await Task.Run(task);

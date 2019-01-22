@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Txooo.Extension;
@@ -24,15 +26,30 @@ namespace Ys.Sdk.Demo
 		[STAThread]
 		static void Main()
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
-			if (CanRun())
+			try
 			{
-				JsonConvertSettings();
-				Application.Run(new MainForm());
+				//设置应用程序处理异常方式：ThreadException处理
+				Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+				Application.ThreadException += new ThreadExceptionEventHandler(Application_ThreadException);
+				AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
+
+				Application.EnableVisualStyles();
+				Application.SetCompatibleTextRenderingDefault(false);
+				if (CanRun())
+				{
+					JsonConvertSettings();
+					Application.Run(new MainForm());
+				}
+			}
+			catch (Exception ex)
+			{
+				var _errorMsg = GetExceptionMsg(ex, string.Empty);
+				LogService.AppendErrorLog(typeof(App), "应用程序的主入口点异常", ex);
+				MessageBox.Show(_errorMsg, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
+		#region 序列化 启动检测
 		/// <summary>
 		/// 全局序列化设置
 		/// </summary>
@@ -93,6 +110,7 @@ namespace Ys.Sdk.Demo
 			}
 			return canRun;
 		}
+		#endregion
 
 		#region 联网校验
 		private const int INTERNET_CONNECTION_MODEM = 1;
@@ -144,6 +162,56 @@ namespace Ys.Sdk.Demo
 				LogService.AppendErrorLog(typeof(App), "升级程序异常", ex);
 			}
 			return newVersion;
+		}
+		#endregion
+
+		#region 异常处理
+		/// <summary>
+		/// 处理UI线程异常
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
+		{
+			var _errorMsg = GetExceptionMsg(e.Exception, e.ToString());
+			LogService.AppendErrorLog(typeof(App), "处理UI线程异常", e.Exception);
+			MessageBox.Show(_errorMsg, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+		/// <summary>
+		/// 处理非UI线程异常
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+		{
+			var _errorMsg = GetExceptionMsg(e.ExceptionObject as Exception, e.ToString());
+			LogService.AppendErrorLog(typeof(App), "处理非UI线程异常", (Exception)e.ExceptionObject);
+			MessageBox.Show(_errorMsg, "系统错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+		}
+
+		/// <summary>
+		/// 生成自定义异常消息
+		/// </summary>
+		/// <param name="ex">异常对象</param>
+		/// <param name="backStr">备用异常消息：当ex为null时有效</param>
+		/// <returns>异常字符串文本</returns>
+		static string GetExceptionMsg(Exception ex, string backStr)
+		{
+			StringBuilder sb = new StringBuilder();
+			sb.AppendLine("****************************异常文本****************************");
+			sb.AppendLine("【出现时间】：" + DateTime.Now.ToString());
+			if (ex != null)
+			{
+				sb.AppendLine("【异常类型】：" + ex.GetType().Name);
+				sb.AppendLine("【异常信息】：" + ex.Message);
+				sb.AppendLine("【堆栈调用】：" + ex.StackTrace);
+			}
+			else
+			{
+				sb.AppendLine("【未处理异常】：" + backStr);
+			}
+			sb.AppendLine("***************************************************************");
+			return sb.ToString();
 		}
 		#endregion
 	}

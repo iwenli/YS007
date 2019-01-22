@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Txooo.Extension;
 using Txooo.Extension.Extension;
+using Ys.Sdk.Demo.Controls;
 using Ys.Sdk.Demo.Core;
 using Ys.Sdk.Demo.Forms;
 using Ys.Sdk.Demo.Properties;
@@ -20,21 +21,17 @@ namespace Ys.Sdk.Demo
 {
 	public partial class MainForm : FormBase
 	{
-		/// <summary>
-		/// 记录用户是否正在播放状态，0为未播放，1为正在播放
-		/// </summary>
-		int a = 0;
-		/// <summary>
-		/// 表示用户选择的是几个窗口播放，默认为1   
-		/// </summary>
-		int c = 1;
+		List<PlayControl> playControls = new List<PlayControl>();
 
 		public MainForm()
 		{
 			InitializeComponent();
+			RichTextBox = txtLog;
+
 			//try
 			//{
 			//	M();
+
 			//}
 			//catch (Exception ex)
 			//{
@@ -51,11 +48,6 @@ namespace Ys.Sdk.Demo
 				, ConstParams.APP_AUTHOR);
 			InitToolbar();
 			InitStatusBar();
-			InitFormControlAsync();
-			LogService.ShowLog += async (msg) =>
-			{
-				Log(msg);
-			};
 		}
 
 		/// <summary>
@@ -63,14 +55,64 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		async Task InitFormControlAsync()
 		{
-			await ResetPalyBoxAsync();
-			flpPlay.Resize += async (s, e) => { await ResetPalyBoxAsync(); };
-			YsAction.OnSubscribe += (e, s) =>
-			{
-				picbox[j].Image = null;
-				Log(s.ToString());
-			};
+			InitContextMenu();
+			await InitPalyBoxAsync();
+			flpPlay.Resize += async (s, e) => { await InitPalyBoxAsync(false); };
 		}
+
+		/// <summary>
+		/// 右键菜单相关事件
+		/// </summary>
+		private void InitContextMenu(bool isBindEvent = true)
+		{
+			foreach (var subItem in rightMenuContext.Items)
+			{
+				if (subItem is ToolStripMenuItem)
+				{
+					var _subItem = subItem as ToolStripMenuItem;
+					if (_subItem.Name == nameof(tsmiCameraCount))
+					{
+						//监控数量
+						foreach (ToolStripMenuItem item in _subItem.DropDownItems)
+						{
+							item.Checked = item.Tag.ToString() == _context.CacheContext.Data.PlayConfig.PlayBoxCount.ToString();
+							if (isBindEvent)
+							{
+								item.Click += (s, e) =>
+								{
+									//更新
+									var _value = Convert.ToInt32((s as ToolStripMenuItem).Tag);
+									_context.CacheContext.Data.PlayConfig.PlayBoxCount = _value;
+									_context.CacheContext.Save();
+									InitContextMenu(false);
+									InitPalyBoxAsync();
+								};
+							}
+						}
+					}
+					else if (_subItem.Name == nameof(tsmiLevel))
+					{
+						//清晰度
+						foreach (ToolStripMenuItem item in _subItem.DropDownItems)
+						{
+							item.Checked = item.Tag.ToString() == _context.CacheContext.Data.PlayConfig.Level.ToString();
+							if (isBindEvent)
+							{
+								item.Click += (s, e) =>
+								{
+									//更新
+									var _value = Convert.ToInt32((s as ToolStripMenuItem).Tag);
+									_context.CacheContext.Data.PlayConfig.Level = _value;
+									_context.CacheContext.Save();
+									InitContextMenu(false);
+								};
+							}
+						}
+					}
+				}
+			}
+		}
+
 
 		#region 服务接入
 
@@ -81,8 +123,13 @@ namespace Ys.Sdk.Demo
 		{
 			BeginOperation("正在初始化配置信息...", 0, true);
 			_context = new ServiceContext();
+			YsAction.OnSubscribe += (s, e) =>
+			{
+				AppendLogInfo(e.ToJson());
+			};
 			EndOperation();
 		}
+
 
 		#endregion
 
@@ -94,10 +141,12 @@ namespace Ys.Sdk.Demo
 		/// <param name="e"></param>
 		void Login(object sender, EventArgs e)
 		{
-			Log("登录中...");
-			if (new Login(_context).ShowDialog(this) != DialogResult.OK)
+			//var _sessionId = YsAction.AllocSession();
+			//var _searchResult = YsAction.Search(_sessionId, "C39424393", 1);
+			AppendLogWarning("登录中...");
+			if (new Login(_context, txtLog).ShowDialog(this) != DialogResult.OK)
 			{
-				Log("登录取消...");
+				AppendLogWarning("登录取消...");
 			}
 		}
 		/// <summary>
@@ -107,33 +156,14 @@ namespace Ys.Sdk.Demo
 		/// <param name="e"></param>
 		void Logout(object sender, EventArgs e)
 		{
-			//清空数据
-			//foreach (Control ctl in gbArea.Controls)
-			//{
-			//    if (ctl is ComboBox)
-			//    {
-			//        var combobox = ctl as ComboBox;
-			//        if (combobox.DataSource != null)
-			//        {
-			//            combobox.DataSource = null;
-			//        }
-			//    }
-			//}
-			//foreach (Control ctl in gbClass.Controls)
-			//{
-			//    if (ctl is ComboBox)
-			//    {
-			//        var combobox = ctl as ComboBox;
-			//        if (combobox.DataSource != null)
-			//        {
-			//            combobox.DataSource = null;
-			//        }
-			//    }
-			//}
-			//txtLog.Text = string.Empty;
+			txtLog.Clear();
+			flpCameraList.Controls.Clear();
+			flpPlay.Controls.Clear();
+			playControls.Clear();
+
 			_context.CacheContext.Save();
 			_context.Session.Logout();
-			AppendLogWarning(txtLog, "退出登录成功！");
+			AppendLogWarning("退出登录成功！");
 		}
 		/// <summary>
 		/// 登录状态变化
@@ -146,8 +176,8 @@ namespace Ys.Sdk.Demo
 			tsLogin.Text = _context.Session.IsLogined ? string.Format("已登录为【{0} ({1})】", _context.Session.LoginInfo.Mobile, _context.Session.LoginInfo.BrandList.FirstOrDefault().BrandName) : "登录(&I)";
 			if (_context.Session.IsLogined)
 			{
-				Log("登录成功...");
-				Log(tsLogin.Text);
+				AppendLogInfo("登录成功...");
+				AppendLogInfo(tsLogin.Text);
 				try
 				{
 					BeginOperation("开始更新缓存数据...", 0, true);
@@ -157,6 +187,8 @@ namespace Ys.Sdk.Demo
 					BeginOperation("开始渲染设备列表...", 0, true);
 					await InitCameraListAsync();
 					EndOperation("设备列表渲染完成...");
+					//绑定主业务
+					InitFormControlAsync();
 				}
 				catch (Exception ex)
 				{
@@ -217,7 +249,7 @@ namespace Ys.Sdk.Demo
 		void BeginOperation(string opName = "正在操作，请稍等...", int maxItemsCount = 0, bool disableForm = true)
 		{
 			stStatus.Text = opName;
-			Log(stStatus.Text);
+			AppendLogWarning(stStatus.Text);
 			stProgress.Visible = true;
 			stProgress.Maximum = maxItemsCount > 0 ? maxItemsCount : 100;
 			stProgress.Style = maxItemsCount > 0 ? ProgressBarStyle.Blocks : ProgressBarStyle.Marquee;
@@ -228,7 +260,7 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		void EndOperation(string opName = "就绪.")
 		{
-			Log(opName);
+			AppendLogInfo(opName);
 			stStatus.Text = opName;
 			stProgress.Visible = false;
 		}
@@ -240,21 +272,21 @@ namespace Ys.Sdk.Demo
 		{
 			T("InitSdk", YsAction.InitSdk());
 			T(YsAction.GetAccessToken());
-			var _list = YsAction.GetCameraList("C04104941");
-			 _list = YsAction.GetCameraList();
-			T("DisposeSdk", YsAction.DisposeSdk());
+			//var _list = YsAction.GetCameraList("C39424393");
+			//_list = YsAction.GetCameraList();
+			//T("DisposeSdk", YsAction.DisposeSdk());
 		}
 
 		void T(string msg = "", bool result = true)
 		{
-			Log($"{msg} { (result ? "成功" : "失败")}");
+			AppendLogInfo($"{msg} { (result ? "成功" : "失败")}");
 		}
 		#endregion
 
-		void Log(string msg)
-		{
-			AppendLog(txtLog, msg);
-		}
+		//void AppendLogInfo(string msg)
+		//{
+		//	base.AppendLogInfo(msg);
+		//}
 
 		/// <summary>
 		/// 初始化监控列表
@@ -315,12 +347,6 @@ namespace Ys.Sdk.Demo
 		}
 
 		#region 单击该缩略图获取摄像头ID并播放
-		string[] PlayCameraId = new string[9];
-		IntPtr[] SessionId = new IntPtr[9];//存放申请的session
-		PictureBox[] picbox = new PictureBox[9];//创建对象数组，存放picbox对象，最多9画面，所以最多9个
-		static IntPtr[] handle = new IntPtr[9];//存放播放句柄
-		int j = 0;
-		int d = 0;
 		private void picbox_MouseClick(object sender, MouseEventArgs e)
 		{
 			var pictureBox = sender as PictureBox;//取出点击的控件sender
@@ -340,114 +366,64 @@ namespace Ys.Sdk.Demo
 				EM("设备不在线，无法播放！");
 				return;
 			}
-			if (PlayCameraId.Contains(cameraId))
+			if (playControls.Any(m => m.Camera?.CameraId == cameraId))
 			{
 				IS("该视频已经在播放中，请勿重复点击！");
 				return;
 			}
-			handle[j] = picbox[j].Handle;//赋予句柄
-			if (a == 1 && d == 1)//全部容器都在播放
+			var _playControl = playControls.FirstOrDefault(m => m.Camera.IsNull());
+			if (_playControl == null)
 			{
-				bool close = YsAction.Stop(SessionId[j]);//关闭最开始打开的画面
+				_playControl = playControls.FirstOrDefault();
 			}
-			PlayCameraId[j] = cameraId;
-			PlayAsync(j);
-			if (j < c - 1)
-			{
-				j++;
-			}
-			else if (j == c - 1)
-			{
-				j = 0;
-				d = 1;
-			}
-		}
-
-		/// <summary>
-		/// 播放 异步
-		/// </summary>
-		/// <param name="boxCount"></param>
-		/// <returns></returns>
-		async Task PlayAsync(int index)
-		{
-			BeginOperation($"准备播放");
-			await RunAsync(() =>
-			{
-				Play(index);
-			});
-			EndOperation();
-		}
-		/// <summary>
-		/// 播放
-		/// </summary>
-		/// <param name="index"></param>
-		void Play(int index = 0)
-		{
-			SessionId[index] = YsAction.AllocSession();
-			if (SessionId[index] != null)
-			{
-				picbox[index].Image = Resources.load2;
-				try
-				{
-					var play = YsAction.Play(handle[index], SessionId[index], PlayCameraId[index], 2, _context.CacheContext.Data.SafeKye);
-					if (play == true)
-					{
-						a = 1;
-					}
-				}
-				catch (Exception ex)
-				{
-					EM(ex.Message);
-				}
-			}
-			else
-			{
-				IS("申请会话异常!");
-			}
+			_playControl.Play(camera);
 		}
 		#endregion
 
 		#region 创建播放容器并添加双击事件
-		async Task ResetPalyBoxAsync()
+		async Task InitPalyBoxAsync(bool isRrset = true)
 		{
-			BeginOperation("开始创建播放容器");
+			BeginOperation("重置播放容器开始");
 			await RunAsync(() =>
 			{
-				ResetPalyBox();
+				InitPalyBox(isRrset);
 			});
-			EndOperation("播放容器创建完毕");
+			EndOperation("重置播放容器完成");
 		}
-		void ResetPalyBox()
+		void InitPalyBox(bool isRrset = true)
 		{
 			if (flpPlay.InvokeRequired)
 			{
 				flpPlay.Invoke(new Action(
 					() =>
 					{
-						ResetPalyBox();
+						InitPalyBox(isRrset);
 					}
 				));
 				return;
 			}
-			flpPlay.Controls.Clear();//清楚所有容器
-			var _rolOrColCount = (int)Math.Sqrt(c);
-			var height = (flpPlay.Height - _rolOrColCount * 5) / _rolOrColCount;
-			var width = (flpPlay.Width - _rolOrColCount * 5) / _rolOrColCount;
-			for (int i = 0; i < c; i++)
+			if (isRrset)
 			{
-				var pictureBox = new PictureBox
+				flpPlay.Controls.Clear();//清除所有容器
+				playControls.Clear();
+				for (int i = 0; i < _context.CacheContext.Data.PlayConfig.PlayBoxCount; i++)
 				{
-					BackColor = Color.Black,
-					Size = new Size(width, height),//指定播放容器大小4画面
-					Name = "picBox" + i,
-					Tag = i,
-					SizeMode = PictureBoxSizeMode.CenterImage
-				};
-				flpPlay.Controls.Add(pictureBox);//创建播放容器 
-				picbox[i] = pictureBox;
-				handle[i] = picbox[i].Handle;
-				pictureBox.Margin = new Padding(1);
-				picbox[i].MouseDoubleClick += new MouseEventHandler(picbox_MouseDoubleClick);//添加鼠标双击击事件，用于全屏播放
+					var playControl = new PlayControl(_context, richTextBox: txtLog)
+					{
+						Name = "playBox" + i,
+						Tag = i,
+						Margin = new Padding(1)
+					};
+					flpPlay.Controls.Add(playControl);//创建播放容器 
+					playControls.Add(playControl);
+				}
+			}
+			var _rolOrColCount = (int)Math.Sqrt(_context.CacheContext.Data.PlayConfig.PlayBoxCount);
+			var height = (flpPlay.Height - _rolOrColCount * 2) / _rolOrColCount;
+			var width = (flpPlay.Width - _rolOrColCount * 2) / _rolOrColCount;
+			foreach (var control in playControls)
+			{
+				control.Size = new Size(width, height);//指定播放容器大小
 			}
 		}
 		#endregion
@@ -472,32 +448,6 @@ namespace Ys.Sdk.Demo
 			{
 				pictureBox.Image = null;
 			}
-		}
-		#endregion
-
-		#region 双击跳转到全屏显示窗口
-		private void picbox_MouseDoubleClick(object sender, EventArgs e)
-		{
-			PictureBox picb1 = sender as PictureBox;//取出点击的控件sender
-			if (picb1.IsNull())
-			{
-				EM("请重试");
-				return;
-			}
-			var index = Convert.ToInt32(picb1.Tag);
-			var cameraId = PlayCameraId[index];
-			if (string.IsNullOrEmpty(cameraId))
-			{
-				EM("无视频");
-				return;
-			}
-			YsAction.Stop(SessionId[index]);//关闭当前所有正在播放的该摄像头
-			var frm = new FullCamera(cameraId, SessionId[index], 3, _context.CacheContext.Data.SafeKye);
-			frm.FormClosed += async (s, args) =>
-			{
-				await PlayAsync(index);
-			};
-			frm.ShowDialog();
 		}
 		#endregion
 	}

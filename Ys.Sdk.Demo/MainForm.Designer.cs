@@ -30,12 +30,23 @@ namespace Ys.Sdk.Demo
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
 			this.splitContainer2 = new System.Windows.Forms.SplitContainer();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.flpCameraList = new System.Windows.Forms.FlowLayoutPanel();
 			this.groupBox2 = new System.Windows.Forms.GroupBox();
+			this.rightMenuContext = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.tsmiCameraCount = new System.Windows.Forms.ToolStripMenuItem();
+			this.单画面ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.四画面ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.九画面ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.tsmiLevel = new System.Windows.Forms.ToolStripMenuItem();
+			this.流畅ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.标准ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.高清ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.超清ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.flpPlay = new System.Windows.Forms.FlowLayoutPanel();
 			this.gbLog = new System.Windows.Forms.GroupBox();
 			this.txtLog = new System.Windows.Forms.RichTextBox();
@@ -63,6 +74,7 @@ namespace Ys.Sdk.Demo
 			this.splitContainer2.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			this.groupBox2.SuspendLayout();
+			this.rightMenuContext.SuspendLayout();
 			this.gbLog.SuspendLayout();
 			this.ts.SuspendLayout();
 			this.st.SuspendLayout();
@@ -91,7 +103,7 @@ namespace Ys.Sdk.Demo
 			// 
 			this.splitContainer1.Panel2.Controls.Add(this.gbLog);
 			this.splitContainer1.Size = new System.Drawing.Size(1095, 604);
-			this.splitContainer1.SplitterDistance = 849;
+			this.splitContainer1.SplitterDistance = 916;
 			this.splitContainer1.TabIndex = 0;
 			// 
 			// splitContainer2
@@ -107,8 +119,8 @@ namespace Ys.Sdk.Demo
 			// splitContainer2.Panel2
 			// 
 			this.splitContainer2.Panel2.Controls.Add(this.groupBox2);
-			this.splitContainer2.Size = new System.Drawing.Size(849, 604);
-			this.splitContainer2.SplitterDistance = 282;
+			this.splitContainer2.Size = new System.Drawing.Size(916, 604);
+			this.splitContainer2.SplitterDistance = 132;
 			this.splitContainer2.TabIndex = 0;
 			// 
 			// groupBox1
@@ -117,7 +129,7 @@ namespace Ys.Sdk.Demo
 			this.groupBox1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox1.Location = new System.Drawing.Point(0, 0);
 			this.groupBox1.Name = "groupBox1";
-			this.groupBox1.Size = new System.Drawing.Size(282, 604);
+			this.groupBox1.Size = new System.Drawing.Size(132, 604);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "设备";
@@ -128,20 +140,99 @@ namespace Ys.Sdk.Demo
 			this.flpCameraList.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flpCameraList.Location = new System.Drawing.Point(3, 17);
 			this.flpCameraList.Name = "flpCameraList";
-			this.flpCameraList.Size = new System.Drawing.Size(276, 584);
+			this.flpCameraList.Size = new System.Drawing.Size(126, 584);
 			this.flpCameraList.TabIndex = 0;
 			// 
 			// groupBox2
 			// 
 			this.groupBox2.BackColor = System.Drawing.Color.Transparent;
+			this.groupBox2.ContextMenuStrip = this.rightMenuContext;
 			this.groupBox2.Controls.Add(this.flpPlay);
 			this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.groupBox2.Location = new System.Drawing.Point(0, 0);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(563, 604);
+			this.groupBox2.Size = new System.Drawing.Size(780, 604);
 			this.groupBox2.TabIndex = 1;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "监控预览";
+			// 
+			// rightMenuContext
+			// 
+			this.rightMenuContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tsmiCameraCount,
+            this.tsmiLevel});
+			this.rightMenuContext.Name = "rightMenuContext";
+			this.rightMenuContext.Size = new System.Drawing.Size(181, 70);
+			// 
+			// tsmiCameraCount
+			// 
+			this.tsmiCameraCount.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.单画面ToolStripMenuItem,
+            this.四画面ToolStripMenuItem,
+            this.九画面ToolStripMenuItem});
+			this.tsmiCameraCount.Name = "tsmiCameraCount";
+			this.tsmiCameraCount.Size = new System.Drawing.Size(180, 22);
+			this.tsmiCameraCount.Text = "画  面(&S)";
+			// 
+			// 单画面ToolStripMenuItem
+			// 
+			this.单画面ToolStripMenuItem.Name = "单画面ToolStripMenuItem";
+			this.单画面ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.单画面ToolStripMenuItem.Tag = "1";
+			this.单画面ToolStripMenuItem.Text = "单画面";
+			// 
+			// 四画面ToolStripMenuItem
+			// 
+			this.四画面ToolStripMenuItem.Name = "四画面ToolStripMenuItem";
+			this.四画面ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.四画面ToolStripMenuItem.Tag = "4";
+			this.四画面ToolStripMenuItem.Text = "四画面";
+			// 
+			// 九画面ToolStripMenuItem
+			// 
+			this.九画面ToolStripMenuItem.Name = "九画面ToolStripMenuItem";
+			this.九画面ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.九画面ToolStripMenuItem.Tag = "9";
+			this.九画面ToolStripMenuItem.Text = "九画面";
+			// 
+			// tsmiLevel
+			// 
+			this.tsmiLevel.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.流畅ToolStripMenuItem,
+            this.标准ToolStripMenuItem,
+            this.高清ToolStripMenuItem,
+            this.超清ToolStripMenuItem});
+			this.tsmiLevel.Name = "tsmiLevel";
+			this.tsmiLevel.Size = new System.Drawing.Size(180, 22);
+			this.tsmiLevel.Text = "清晰度(&L)";
+			// 
+			// 流畅ToolStripMenuItem
+			// 
+			this.流畅ToolStripMenuItem.Name = "流畅ToolStripMenuItem";
+			this.流畅ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.流畅ToolStripMenuItem.Tag = "0";
+			this.流畅ToolStripMenuItem.Text = "流畅";
+			// 
+			// 标准ToolStripMenuItem
+			// 
+			this.标准ToolStripMenuItem.Name = "标准ToolStripMenuItem";
+			this.标准ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.标准ToolStripMenuItem.Tag = "1";
+			this.标准ToolStripMenuItem.Text = "标准";
+			// 
+			// 高清ToolStripMenuItem
+			// 
+			this.高清ToolStripMenuItem.Name = "高清ToolStripMenuItem";
+			this.高清ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.高清ToolStripMenuItem.Tag = "2";
+			this.高清ToolStripMenuItem.Text = "高清";
+			// 
+			// 超清ToolStripMenuItem
+			// 
+			this.超清ToolStripMenuItem.Name = "超清ToolStripMenuItem";
+			this.超清ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.超清ToolStripMenuItem.Tag = "3";
+			this.超清ToolStripMenuItem.Text = "超清";
 			// 
 			// flpPlay
 			// 
@@ -149,7 +240,7 @@ namespace Ys.Sdk.Demo
 			this.flpPlay.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.flpPlay.Location = new System.Drawing.Point(3, 17);
 			this.flpPlay.Name = "flpPlay";
-			this.flpPlay.Size = new System.Drawing.Size(557, 584);
+			this.flpPlay.Size = new System.Drawing.Size(774, 584);
 			this.flpPlay.TabIndex = 0;
 			// 
 			// gbLog
@@ -158,7 +249,7 @@ namespace Ys.Sdk.Demo
 			this.gbLog.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gbLog.Location = new System.Drawing.Point(0, 0);
 			this.gbLog.Name = "gbLog";
-			this.gbLog.Size = new System.Drawing.Size(242, 604);
+			this.gbLog.Size = new System.Drawing.Size(175, 604);
 			this.gbLog.TabIndex = 0;
 			this.gbLog.TabStop = false;
 			this.gbLog.Text = "日志";
@@ -171,7 +262,7 @@ namespace Ys.Sdk.Demo
 			this.txtLog.Location = new System.Drawing.Point(3, 17);
 			this.txtLog.Name = "txtLog";
 			this.txtLog.ReadOnly = true;
-			this.txtLog.Size = new System.Drawing.Size(236, 584);
+			this.txtLog.Size = new System.Drawing.Size(169, 584);
 			this.txtLog.TabIndex = 0;
 			this.txtLog.Text = "";
 			// 
@@ -317,6 +408,7 @@ namespace Ys.Sdk.Demo
 			this.Icon = global::Ys.Sdk.Demo.Properties.Resources.favicon;
 			this.Name = "MainForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.panel1.ResumeLayout(false);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
@@ -328,6 +420,7 @@ namespace Ys.Sdk.Demo
 			this.splitContainer2.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox2.ResumeLayout(false);
+			this.rightMenuContext.ResumeLayout(false);
 			this.gbLog.ResumeLayout(false);
 			this.ts.ResumeLayout(false);
 			this.ts.PerformLayout();
@@ -361,5 +454,15 @@ namespace Ys.Sdk.Demo
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.FlowLayoutPanel flpCameraList;
 		private System.Windows.Forms.FlowLayoutPanel flpPlay;
+		private System.Windows.Forms.ContextMenuStrip rightMenuContext;
+		private System.Windows.Forms.ToolStripMenuItem tsmiCameraCount;
+		private System.Windows.Forms.ToolStripMenuItem tsmiLevel;
+		private System.Windows.Forms.ToolStripMenuItem 单画面ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 四画面ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 九画面ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 流畅ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 标准ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 高清ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 超清ToolStripMenuItem;
 	}
 }

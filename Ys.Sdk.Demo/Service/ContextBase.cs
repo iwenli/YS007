@@ -62,6 +62,7 @@ namespace Ys.Sdk.Demo.Service
 				{
 
 					File.WriteAllText(file, data.ToJson());
+					this.AppendInfoLog("保存缓存Ok...");
 				}
 				catch (Exception ex)
 				{

@@ -94,10 +94,14 @@ namespace Ys.Sdk.Demo.Service.Cache
 		{
 			return await Task.Run(async () =>
 			{
+				Data.StoreList.Clear();
+				Data.DeviceList.Clear();
+
 				//更新缓存
 				Data.LoginInfo = ServiceContext.Session.LoginInfo;
 
 				var storeResult = await ServiceContext.StoreService.GetList();
+
 				if (storeResult.IsSuccess)
 				{
 					Data.StoreList = storeResult.Data;
@@ -114,6 +118,9 @@ namespace Ys.Sdk.Demo.Service.Cache
 					if (device.DeviceType == 1)
 					{
 						device.CameraList = YsAction.GetCameraList(device.Info);
+					}
+					else {
+						device.CameraList.Clear();
 					}
 				}
 				Data.LastUpdateTime = DateTime.Now;

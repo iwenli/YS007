@@ -22,9 +22,26 @@ namespace Ys.Sdk.Demo.Core
 			Error = error;
 			Info = info;
 			m_user = user;
+			var _err = "";
+			YsError.MessageErrorDictionary?.TryGetValue(Info, out _err);
+			MessageError = $"{ _err}({Info})";
+
+			if (Info == "UE105")
+			{
+				_err = "";
+				YsError.CodeErrorDictionary?.TryGetValue(Error, out _err);
+				CodeError = $"{ _err}({Error})";
+			}
 		}
 		/// <summary>
-		/// 消息类型 3:播放开始 4:播放终止 5:回放结束
+		/// 消息类型 
+		/// 0:操作失败,则根据MessageInfo来判断错误信息,如果错误信息为UE105, 则可以根据ErrorCode确定具体错误码
+		/// 3:播放开始 
+		/// 4:播放终止 
+		/// 5:回放结束
+		/// 
+		/// 20:录像搜索成功
+		/// 22：录像搜索失败
 		/// </summary>
 		public uint MsgType { get; set; }
 		/// <summary>
@@ -44,13 +61,14 @@ namespace Ys.Sdk.Demo.Core
 		/// </summary>
 		public string UserId => Marshal.PtrToStringAnsi(m_user);
 
-		public string ErrorMsg => YsError.ErrorCodeErrorDictionary?[Error] ?? "";
-		public string ErrorMsg1 => YsError.MessageInfoErrorDictionary?[Info] ?? "";
+		public string MessageError { get; private set; }
+
+		public string CodeError { get; private set; }
 
 		public override string ToString()
 		{
 			var action = MsgType == 3 ? "播放开始" : MsgType == 4 ? "播放终止" : MsgType == 5 ? "回放结束" : $"未知操作";
-			return $"用户[{UserId}]-会话[{SessionId}]的视频[{action}[{MsgType}]] {ErrorMsg1} {ErrorMsg}";
+			return $"用户[{UserId}]-会话[{SessionId}]的视频[{action}[{MsgType}]] {CodeError} {MessageError}";
 		}
 	}
 }

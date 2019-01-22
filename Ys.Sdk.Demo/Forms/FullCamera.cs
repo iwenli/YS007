@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Ys.Sdk.Demo.Controls;
 using Ys.Sdk.Demo.Core;
 using Ys.Sdk.Demo.Properties;
 
@@ -14,36 +15,22 @@ namespace Ys.Sdk.Demo.Forms
 {
 	public partial class FullCamera : FormBase
 	{
-		private readonly string cameraId;
-		private readonly IntPtr sessionId;
-		private readonly int level;
-		private readonly string safeKey;
 
-		public FullCamera(string cameraId, IntPtr sessionId, int level, string safeKey)
+		public FullCamera(PlayControl playControl)
 		{
 			InitializeComponent();
+			PlayControl = playControl;
 
-			this.cameraId = cameraId;
-			this.sessionId = sessionId;
-			this.level = level;
-			this.safeKey = safeKey;
-			var pictureBox = new PictureBox();
-			pictureBox.BackColor = Color.Black;
-			pictureBox.Name = "picFull";
-			pictureBox.Dock = DockStyle.Fill;
-			pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-			pictureBox.MouseDoubleClick += (s, e) =>
+			PlayControl.Dock = DockStyle.Fill;
+			Controls.Add(PlayControl);
+			PlayControl.Play();
+			PlayControl.PlayBox.MouseDoubleClick += (s, e) =>
 			{
-				Closed();
+				Exit();
 			};
-			Controls.Add(pictureBox);
-
-			var play = YsAction.Play(pictureBox.Handle, sessionId, cameraId, level, safeKey);
-			if (!play)
-			{
-				SM("全屏播放失败！");
-			}
 		}
+
+		public PlayControl PlayControl { get; }
 
 		protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
 		{
@@ -54,17 +41,17 @@ namespace Ys.Sdk.Demo.Forms
 				switch (keyData)
 				{
 					case Keys.Escape:
-						Closed();//esc关闭窗体
+						Exit();//esc关闭窗体
 						break;
 				}
 			}
 			return false;
 		}
 
-		void Closed()
+		void Exit()
 		{
-			YsAction.Stop(sessionId);
-			Close();
+			PlayControl.Stop();
+			base.Close();
 		}
 	}
 }

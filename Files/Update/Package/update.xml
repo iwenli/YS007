@@ -1,28 +1,28 @@
 <?xml version="1.0"?>
 <UpdateInfo xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <AppName>无人超市监控系统</AppName>
-  <AppVersion>1.0.2019.115</AppVersion>
+  <AppVersion>1.0.2019.121</AppVersion>
   <FileExecuteBefore />
   <ExecuteTimeout>0</ExecuteTimeout>
   <TreatErrorAsNotUpdated>false</TreatErrorAsNotUpdated>
   <PromptUserBeforeAutomaticUpgrade>true</PromptUserBeforeAutomaticUpgrade>
   <AutoCloseSucceedWindow>true</AutoCloseSucceedWindow>
-  <Package>ec5f9ba39987430683f6c192372e6923.zip</Package>
-  <MD5>BA0B3397DEB8F98D1EEE0314A18946B0</MD5>
+  <Package>1c3a25760f384d91a1ffd35af75ef315.zip</Package>
+  <MD5>DF0FADE2737049080CC2324A1BA3D354</MD5>
   <DeleteMethod>None</DeleteMethod>
-  <PackageSize>75344</PackageSize>
+  <PackageSize>97084</PackageSize>
   <ForceUpdate>false</ForceUpdate>
   <Packages>
     <PackageInfo>
       <FilePath>无人超市监控系统.exe</FilePath>
-      <FileSize>188928</FileSize>
-      <Version>1.0.2019.115</Version>
-      <PackageHash>1D85E101218009B5CFC6CDD609D3B6D5</PackageHash>
-      <PackageName>6946a3bafe224fe19d41da080d92e463.zip</PackageName>
-      <PackageSize>74845</PackageSize>
+      <FileSize>246784</FileSize>
+      <Version>1.0.2019.121</Version>
+      <PackageHash>C6059674E2FE6371C0A91402C0796883</PackageHash>
+      <PackageName>d0799e4468664fefa318188e0df35044.zip</PackageName>
+      <PackageSize>96585</PackageSize>
       <Method>VersionCompare</Method>
       <VerificationLevel>Size Hash</VerificationLevel>
-      <FileHash>418C3DAF96D780D5171E6968120F4D59</FileHash>
+      <FileHash>5593D13E3D7C42583796CA893EB12A99</FileHash>
       <Files>
         <string>无人超市监控系统.exe</string>
       </Files>
@@ -32,7 +32,7 @@
       <FileSize>760</FileSize>
       <Version>0.0.0.0</Version>
       <PackageHash>AE7C0D154DA008192D97C2944A24B147</PackageHash>
-      <PackageName>c3dcb9ed28424cee98fc6303606bd8af.zip</PackageName>
+      <PackageName>0fc00b77a9d04891b042f149f60b4d38.zip</PackageName>
       <PackageSize>521</PackageSize>
       <Method>VersionCompare</Method>
       <VerificationLevel>Size Hash</VerificationLevel>

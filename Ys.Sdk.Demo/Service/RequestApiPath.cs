@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ys.Sdk.Demo.Common;
 
 namespace Ys.Sdk.Demo.Service
 {
@@ -24,7 +25,7 @@ namespace Ys.Sdk.Demo.Service
 		/// <summary>
 		/// 是否Https
 		/// </summary>
-		public static bool IsHttps => false;
+		public static bool IsHttps => Convert.ToBoolean(AppConfiguration.GetItem("Https") ?? "true");
 		/// <summary>
 		/// 网关请求域
 		/// </summary>

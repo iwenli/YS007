@@ -31,6 +31,12 @@ namespace Ys.Sdk.Demo.Service.Cache
 		public List<StoreInfo> StoreList { get; set; }
 
 		/// <summary>
+		/// 播放配置
+		/// </summary>
+		public PlayConfig PlayConfig { get; set; } = new PlayConfig();
+
+
+		/// <summary>
 		/// 萤石云安全key
 		/// </summary>
 		public string SafeKye => LoginInfo?.ComId == 549250 ? "SUMAO100" : "MAIKE100";

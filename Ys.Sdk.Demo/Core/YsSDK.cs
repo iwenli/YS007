@@ -12,6 +12,7 @@ namespace Ys.Sdk.Demo.Core
 	/// </summary>
 	class YsSDK
 	{
+		#region 初始化 授权
 		/// <summary>
 		/// SDK启动
 		/// </summary>
@@ -21,7 +22,6 @@ namespace Ys.Sdk.Demo.Core
 		/// <returns></returns>
 		[DllImport("OpenNetStream.dll")]
 		public static extern int OpenSDK_InitLib(string AuthAddr, string Platform, string AppId);
-
 
 		/// <summary>
 		/// SDK关闭
@@ -38,19 +38,6 @@ namespace Ys.Sdk.Demo.Core
 		/// <returns></returns>
 		[DllImport("OpenNetStream.dll")]
 		public static extern int OpenSDK_Mid_Login(ref string pToken, ref int TokenLth);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="szUri"></param>
-		/// <param name="szHeaderParam"></param>
-		/// <param name="szBody"></param>
-		/// <param name="iMessage"></param>
-		/// <param name="iLength"></param>
-		/// <returns></returns>
-		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_HttpSendWithWait(string szUri, string szHeaderParam, string szBody, out IntPtr iMessage, out int iLength);
-
 		/// <summary>
 		/// SDK申请会话
 		/// </summary>
@@ -62,7 +49,82 @@ namespace Ys.Sdk.Demo.Core
 		/// <param name="timeout"></param>
 		/// <returns></returns>
 		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_AllocSession(MsgHandler CallBack, IntPtr UserID, ref IntPtr pSID, ref int SIDLth, bool bSync, uint timeout);
+		public static extern int OpenSDK_AllocSession(MsgHandler CallBack, IntPtr UserID, ref IntPtr pSID, ref int SIDLth, bool bSync, uint timeout);/// <summary>
+																																					 /// <returns></returns>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_HttpSendWithWait(string szUri, string szHeaderParam, string szBody, out IntPtr iMessage, out int iLength);
+
+		/// <summary>
+		/// SDK关闭会话
+		/// </summary>
+		/// <param name="SID"></param>
+		/// <returns></returns>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_FreeSession(string SID);
+		#endregion
+
+		#region 设备列表
+		/// <summary>
+		/// SDK获取所有设备摄像机列表
+		/// </summary>
+		/// <param name="accessToken"></param>
+		/// <param name="iPageStart"></param>
+		/// <param name="iPageSize"></param>
+		/// <param name="iMessage"></param>
+		/// <param name="iLength"></param>
+		/// <returns></returns>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_Data_GetDevList(string accessToken, int iPageStart, int iPageSize, out IntPtr iMessage, out int iLength);
+
+		/// <summary>
+		/// SDK获取指定设备摄像机信息
+		/// </summary>
+		/// <param name="accessToken"></param>
+		/// <param name="szDeviceSerial"></param>
+		/// <param name="iMessage"></param>
+		/// <param name="iLength"></param>
+		/// <returns></returns>
+		[DllImport(@"OpenNetStream.dll")]
+		public static extern int OpenSDK_Data_GetDeviceInfo(string accessToken, string szDeviceSerial, out IntPtr iMessage, out int iLength);
+
+
+		#endregion
+
+		#region 预览
+		/// <summary>
+		/// SDK开始播放
+		/// </summary>
+		/// <param name="SID"></param>
+		/// <param name="PlayWnd"></param>
+		/// <param name="CameraId"></param>
+		/// <param name="Token"></param>
+		/// <param name="VideoLevel"></param>
+		/// <param name="SafeKey"></param>
+		/// <param name="AppKey"></param>
+		/// <param name="pNSCBMsg"></param>
+		/// <returns></returns>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_StartRealPlay(IntPtr SID, IntPtr PlayWnd, string CameraId, string Token, int VideoLevel, string SafeKey, string AppKey, uint pNSCBMsg);
+
+		/// <summary>
+		/// SDK关闭播放
+		/// </summary>
+		/// <param name="SID"></param>
+		/// <param name="pNSCBMsg"></param>
+		/// <returns></returns>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_StopRealPlay(IntPtr SID, uint pNSCBMsg);
+		#endregion
+
+		#region 回放 http://open.ys7.com/doc/zh/pc/group__playback.html
+		/// <summary>
+		/// 搜索录像
+		/// </summary>
+		[DllImport("OpenNetStream.dll")]
+		public static extern int OpenSDK_StartSearchEx(string sessionId, string deviceSerial, int channelNo, string startTime, string stopTime);
+
+		#endregion
+
 		/// <summary>
 		/// 及其回调函数格式
 		/// </summary>
@@ -88,37 +150,6 @@ namespace Ys.Sdk.Demo.Core
 			return 0;
 		}
 
-		/// <summary>
-		/// SDK关闭会话
-		/// </summary>
-		/// <param name="SID"></param>
-		/// <returns></returns>
-		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_FreeSession(string SID);
-
-		/// <summary>
-		/// SDK开始播放
-		/// </summary>
-		/// <param name="SID"></param>
-		/// <param name="PlayWnd"></param>
-		/// <param name="CameraId"></param>
-		/// <param name="Token"></param>
-		/// <param name="VideoLevel"></param>
-		/// <param name="SafeKey"></param>
-		/// <param name="AppKey"></param>
-		/// <param name="pNSCBMsg"></param>
-		/// <returns></returns>
-		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_StartRealPlay(IntPtr SID, IntPtr PlayWnd, string CameraId, string Token, int VideoLevel, string SafeKey, string AppKey, uint pNSCBMsg);
-
-		/// <summary>
-		/// SDK关闭播放
-		/// </summary>
-		/// <param name="SID"></param>
-		/// <param name="pNSCBMsg"></param>
-		/// <returns></returns>
-		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_StopRealPlay(IntPtr SID, uint pNSCBMsg);
 
 		/// <summary>
 		/// 截屏
@@ -139,17 +170,6 @@ namespace Ys.Sdk.Demo.Core
 		[DllImport("OpenNetStream.dll")]
 		public static extern int OpenSDK_SetDataCallBack(IntPtr sessionId, OpenSDK_DataCallBack pDataCallBack, string pUser);
 
-		/// <summary>
-		/// SDK获取所有设备摄像机列表
-		/// </summary>
-		/// <param name="accessToken"></param>
-		/// <param name="iPageStart"></param>
-		/// <param name="iPageSize"></param>
-		/// <param name="iMessage"></param>
-		/// <param name="iLength"></param>
-		/// <returns></returns>
-		[DllImport("OpenNetStream.dll")]
-		public static extern int OpenSDK_Data_GetDevList(string accessToken, int iPageStart, int iPageSize, out IntPtr iMessage, out int iLength);
 
 		/// <summary>
 		/// 回调函数格式
@@ -170,19 +190,6 @@ namespace Ys.Sdk.Demo.Core
 			NET_DVR_STREAMDATA = 1,
 			NET_DVR_RECV_END = 2,
 		};
-
-		/// <summary>
-		/// SDK获取指定设备摄像机信息
-		/// </summary>
-		/// <param name="accessToken"></param>
-		/// <param name="szDeviceSerial"></param>
-		/// <param name="iMessage"></param>
-		/// <param name="iLength"></param>
-		/// <returns></returns>
-		[DllImport(@"OpenNetStream.dll")]
-		public static extern int OpenSDK_Data_GetDeviceInfo(string accessToken, string szDeviceSerial, out IntPtr iMessage, out int iLength);
-
-
 
 		/*
         //SDK Http请求接口

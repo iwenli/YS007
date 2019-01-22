@@ -183,7 +183,7 @@ namespace Ys.Sdk.Demo.Core
 		}
 		#endregion
 
-		#region Stop
+		#region 预览
 		/// <summary>
 		/// 停止播放（预览）
 		/// </summary>
@@ -200,7 +200,7 @@ namespace Ys.Sdk.Demo.Core
 		/// <param name="playWnd"></param>
 		/// <param name="sessionId"></param>
 		/// <param name="cameraId"></param>
-		/// <param name="level">清晰度，0流畅，1标清，2高清</param>
+		/// <param name="level">清晰度，0-流畅，1-均衡，2-高清，3-超清</param>
 		/// <param name="safeKey">安全码</param>
 		/// <returns></returns>
 		public static bool Play(IntPtr playWnd, IntPtr sessionId, string cameraId, int level = 2, string safeKey = "MAIKE100")
@@ -209,10 +209,20 @@ namespace Ys.Sdk.Demo.Core
 		}
 		#endregion
 
+		#region 回放
+		public static bool Search(IntPtr sessionId, string deviceSerial, int channelNo, DateTime? startTime = null, DateTime? endTime = null)
+		{
+			var _sessionId = Marshal.PtrToStringAnsi(sessionId);
+			if (startTime == null) startTime = DateTime.Now;
+			if (endTime == null) endTime = startTime?.AddDays(-1);
+			return YsSDK.OpenSDK_StartSearchEx(_sessionId, deviceSerial, channelNo, startTime?.ToString("yyyy-MM-dd hh:mm:ss"), endTime?.ToString("yyyy-MM-dd hh:mm:ss")) == 0;
+		}
+		#endregion
+
 		#region 会话
 		public static IntPtr SessionId;
 		public static int SessionIdLth;
-		public static string SessionIdstr;
+		//public static string SessionIdstr;
 		/// <summary>
 		/// 分配会话后，调用方法之后执行的回调函数
 		/// </summary>
@@ -225,7 +235,7 @@ namespace Ys.Sdk.Demo.Core
 		{
 			IntPtr userID = Marshal.StringToHGlobalAnsi(Cfg.UserId);
 			bool flag = YsSDK.OpenSDK_AllocSession(callBack, userID, ref SessionId, ref SessionIdLth, false, uint.MaxValue) == 0;
-			SessionIdstr = Marshal.PtrToStringAnsi(SessionId, SessionIdLth);
+			//SessionIdstr = Marshal.PtrToStringAnsi(SessionId, SessionIdLth);
 			return SessionId;
 		}
 		/// <summary>

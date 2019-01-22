@@ -101,12 +101,22 @@
     <Compile Include="AppInfo.cs" />
     <Compile Include="Common\AppConfig.cs" />
     <Compile Include="Common\ControlExtended.cs" />
+    <Compile Include="Common\ExceptionExtension.cs" />
     <Compile Include="Common\JsonContractResolver.cs" />
     <Compile Include="Common\SerializeExtension.cs" />
     <Compile Include="Common\VerifyExtention.cs" />
     <Compile Include="Common\ZipHelper.cs" />
-    <Compile Include="Controls\CameraBox.cs">
+    <Compile Include="Controls\MyUserControl.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\MyUserControl.Designer.cs">
+      <DependentUpon>MyUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlayControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\PlayControl.Designer.cs">
+      <DependentUpon>PlayControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Core\Entities\CameraInfo.cs" />
     <Compile Include="Core\Entities\Response\Base.cs" />
@@ -150,6 +160,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Service\Entities\DeviceInfo.cs" />
+    <Compile Include="Service\Entities\PlayConfig.cs" />
     <Compile Include="Service\Entities\Response\VerifyCodeResponse.cs" />
     <Compile Include="Service\Entities\StoreInfo.cs" />
     <Compile Include="Service\Entities\User\BrandInfo.cs" />
@@ -168,6 +179,9 @@
     <Compile Include="Service\Session.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Controls\PlayControl.resx">
+      <DependentUpon>PlayControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormBase.resx">
       <DependentUpon>FormBase.cs</DependentUpon>
     </EmbeddedResource>

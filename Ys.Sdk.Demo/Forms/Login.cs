@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Txooo.Extension;
 using Txooo.Extension.Extension;
 using Ys.Sdk.Demo.Common;
 using Ys.Sdk.Demo.Service;
@@ -25,9 +26,10 @@ namespace Ys.Sdk.Demo.Forms
 		Timer _timer = new Timer();
 		int leftTime = TotalCount;
 
-		public Login(ServiceContext context) : base(context)
+		public Login(ServiceContext context,RichTextBox richTextBox) : base(context)
 		{
 			InitializeComponent();
+			RichTextBox = richTextBox;
 			Text = "登录 " + ConstParams.AssemblyTitle;
 			Init();
 		}
@@ -42,7 +44,7 @@ namespace Ys.Sdk.Demo.Forms
 			btnOk.Enabled = false;
 			btnOk.Click += BtnClick;
 			btnSendCode.Click += BtnClick;
-			var _brandId = 497863;  //498451
+			var _brandId = 499006;  // 497863;  //498451
 			txtMobile.Text = "11111" + _brandId;
 			txtMobileCode.Text = _brandId.ToString();
 
@@ -90,6 +92,7 @@ namespace Ys.Sdk.Demo.Forms
 					{
 						button.Enabled = false;
 						btnOk.Text = "正在登陆.";
+
 						var result = await _context.Session.LoginAsync(_context, mobile, _serverVerityCode, mobileCode);
 						if (result == null)
 						{
@@ -97,7 +100,7 @@ namespace Ys.Sdk.Demo.Forms
 							Close();
 							return;
 						}
-						this.btnOk.Text = "登录(&O)";
+						btnOk.Text = "登录(&O)";
 						EM("登录失败：" + result.Message);
 						button.Enabled = true;
 					}
@@ -106,15 +109,23 @@ namespace Ys.Sdk.Demo.Forms
 				{
 					//发送验证码
 					btnSendCode.Enabled = false;
-					var checkResult = await _context.PassportService.MobileCanLogin(mobile);
-					if (!checkResult.IsSuccess)
+					try
 					{
-						IS(checkResult.Msg);
-						btnSendCode.Enabled = true;
+						var checkResult = await _context.PassportService.MobileCanLogin(mobile);
+						if (!checkResult.IsSuccess)
+						{
+							IS(checkResult.Msg);
+							btnSendCode.Enabled = true;
+						}
+						else
+						{
+							SendMobileCodeAsync(mobile);
+						}
 					}
-					else
+					catch (Exception ex)
 					{
-						SendMobileCodeAsync(mobile);
+						EM(ex.Message);
+						btnSendCode.Enabled = true;
 					}
 				}
 			}
@@ -128,18 +139,26 @@ namespace Ys.Sdk.Demo.Forms
 		{
 			if (!_timer.Enabled)
 			{
-				var sendResult = await _context.PassportService.SendMobileCode(mobile);
-				if (!sendResult.IsSuccess)
+				try
 				{
-					IS(sendResult.Msg);
-					btnSendCode.Enabled = true;
+					var sendResult = await _context.PassportService.SendMobileCode(mobile);
+					if (!sendResult.IsSuccess)
+					{
+						IS(sendResult.Msg);
+						btnSendCode.Enabled = true;
+					}
+					else
+					{
+						_serverVerityCode = sendResult.MobileVerify;
+						btnOk.Enabled = true;
+						_timer.Enabled = true;
+						_timer.Start();
+					}
 				}
-				else
+				catch (Exception ex)
 				{
-					_serverVerityCode = sendResult.MobileVerify;
-					btnOk.Enabled = true;
-					_timer.Enabled = true;
-					_timer.Start();
+					EM(ex.GetInnerException().Message);
+					btnSendCode.Enabled = true;
 				}
 			}
 		}
