@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ys.Sdk.Demo.Common;
 using Ys.Sdk.Demo.Core;
+using Ys.Sdk.Demo.Core.V2;
 
 namespace Ys.Sdk.Demo.Service.Cache
 {
@@ -111,18 +112,8 @@ namespace Ys.Sdk.Demo.Service.Cache
 					var deviceResult = await ServiceContext.DeviceService.GetList();
 					Data.DeviceList = deviceResult.Data;
 				}
-				//更新监控
-				//Data.CameraList = YsAction.GetCameraList();
-				foreach (var device in Data.DeviceList)
-				{
-					if (device.DeviceType == 1)
-					{
-						device.CameraList = YsAction.GetCameraList(device.Info);
-					}
-					else {
-						device.CameraList.Clear();
-					}
-				}
+				////更新监控
+				//Data.YSDeviceList = SDKAdapter.GetDeviceList();
 				Data.LastUpdateTime = DateTime.Now;
 				Save();
 				return true;

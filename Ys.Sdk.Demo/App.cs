@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Txooo.Extension;
 using Ys.Sdk.Demo.Core;
+using Ys.Sdk.Demo.Core.V2;
 using Ys.Sdk.Demo.Service;
 
 namespace Ys.Sdk.Demo
@@ -96,7 +97,7 @@ namespace Ys.Sdk.Demo
 				}
 				else
 				{
-					canRun = YsAction.InitSdk();
+					canRun = SDKAdapter.Init();
 					if (!canRun)
 					{
 						MessageBox.Show("监控提供商链接失败，请联系软件开发者!", AppInfo.AssemblyTitle,

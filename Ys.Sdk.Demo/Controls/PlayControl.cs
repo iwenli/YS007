@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
-using Txooo.Extension;
 using Ys.Sdk.Demo.Core;
-using Ys.Sdk.Demo.Core.Entities;
+using Ys.Sdk.Demo.Core.Entities.V2;
+using Ys.Sdk.Demo.Core.V2;
 using Ys.Sdk.Demo.Forms;
 using Ys.Sdk.Demo.Properties;
 using Ys.Sdk.Demo.Service;
@@ -23,7 +19,7 @@ namespace Ys.Sdk.Demo.Controls
 		/// <summary>
 		/// 当前播放会话
 		/// </summary>
-		public IntPtr Session => session;
+		public string SessionId => sessionId;
 		/// <summary>
 		/// 是否可以全屏
 		/// </summary>
@@ -42,7 +38,7 @@ namespace Ys.Sdk.Demo.Controls
 		/// <summary>
 		/// 会话
 		/// </summary>
-		private IntPtr session;
+		private string sessionId;
 
 		/// <summary>
 		/// 构造器
@@ -55,8 +51,7 @@ namespace Ys.Sdk.Demo.Controls
 			BackColor = Color.Black;
 
 			picBoxPlay.SizeMode = PictureBoxSizeMode.CenterImage;
-			
-			YsAction.OnSubscribe += YsAction_OnSubscribe;
+			SDKAdapter.OnMessage += SDKAdapter_OnMessage;	
 			CanFull = canFull;
 			if (canFull)
 			{
@@ -65,6 +60,53 @@ namespace Ys.Sdk.Demo.Controls
 			if (camera != null)
 			{
 				Camera = camera;
+			}
+		}
+
+		private void SDKAdapter_OnMessage(object sender, Core.V2.Event.MessageEventArgs e)
+		{
+			switch (e.MessageType)
+			{
+				case MessageType.INS_PLAY_EXCEPTION:
+					break;
+				case MessageType.INS_PLAY_RECONNECT:
+					break;
+				case MessageType.INS_PLAY_RECONNECT_EXCEPTION:
+					break;
+				case MessageType.INS_PLAY_START:
+					playState = 10;
+					picBoxPlay.Image = null;
+					break;
+				case MessageType.INS_PLAY_STOP:
+					playState = 11;
+					break;
+				case MessageType.INS_PLAY_ARCHIVE_END:
+					playState = 12;
+					break;
+				case MessageType.INS_VOICETALK_START:
+					break;
+				case MessageType.INS_VOICETALK_STOP:
+					break;
+				case MessageType.INS_VOICETALK_EXCEPTION:
+					break;
+				case MessageType.INS_PTZ_EXCEPTION:
+					break;
+				case MessageType.INS_RECORD_FILE:
+					break;
+				case MessageType.INS_RECORD_SEARCH_END:
+					break;
+				case MessageType.INS_RECORD_SEARCH_FAILED:
+					break;
+				case MessageType.INS_DEFENSE_SUCCESS:
+					break;
+				case MessageType.INS_DEFENSE_FAILED:
+					break;
+				case MessageType.INS_PLAY_ARCHIVE_EXCEPTION:
+					break;
+				case MessageType.INS_PTZCTRL_SUCCESS:
+					break;
+				case MessageType.INS_PTZCTRL_FAILED:
+					break;
 			}
 		}
 
@@ -90,25 +132,6 @@ namespace Ys.Sdk.Demo.Controls
 			frm.ShowDialog();
 		}
 
-		private void YsAction_OnSubscribe(object sender, SubscribeEventArgs e)
-		{
-			switch (e.MsgType)
-			{
-				case 3:
-					playState = 10;
-					picBoxPlay.Image = null;
-					break;
-				case 4:
-					playState = 11;
-					break;
-				case 5:
-					playState = 12;
-					break;
-				default:
-					break;
-			}
-		}
-
 		/// <summary>
 		/// 播放
 		/// </summary>
@@ -127,15 +150,10 @@ namespace Ys.Sdk.Demo.Controls
 			}
 			if (Camera != null)
 			{
-				session = YsAction.AllocSession();
-				if (session == null)
-				{
-					throw new Exception("申请会话异常!");
-				}
 				picBoxPlay.Image = Resources.load2;
 				try
 				{
-					_playOk = YsAction.Play(picBoxPlay.Handle, session, Camera.CameraId, context.CacheContext.Data.PlayConfig.Level, context.CacheContext.Data.SafeKye);
+					_playOk = SDKAdapter.Play(picBoxPlay.Handle, Camera, context.CacheContext.Data.SafeKye,out sessionId);
 					if (!_playOk)
 					{
 						playState = 3;
@@ -152,7 +170,7 @@ namespace Ys.Sdk.Demo.Controls
 
 		public bool Stop()
 		{
-			var _stopOK = YsAction.Stop(session);
+			var _stopOK = SDKAdapter.Stop(sessionId);
 			return _stopOK;
 		}
 	}

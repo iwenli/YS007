@@ -198,11 +198,6 @@ namespace Ys.Sdk.Demo.Service.Entities
 				return m_errList;
 			}
 		}
-
-		/// <summary>
-		/// 监控设备的监控集合
-		/// </summary>
-		public List<CameraInfo> CameraList { get; set; } = new List<CameraInfo>();
 	}
 
 	/// <summary>

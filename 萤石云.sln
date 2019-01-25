@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ys.Sdk.Demo", "Ys.Sdk.Demo\Ys.Sdk.Demo.csproj", "{9E8FD831-C212-4530-A3C0-18B8BB0093E7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ys.Sdk.DemoTests", "Ys.Sdk.DemoTests\Ys.Sdk.DemoTests.csproj", "{CCC05E5F-518E-40E7-9BA4-B494EC3582D5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{9E8FD831-C212-4530-A3C0-18B8BB0093E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E8FD831-C212-4530-A3C0-18B8BB0093E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E8FD831-C212-4530-A3C0-18B8BB0093E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCC05E5F-518E-40E7-9BA4-B494EC3582D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCC05E5F-518E-40E7-9BA4-B494EC3582D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCC05E5F-518E-40E7-9BA4-B494EC3582D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCC05E5F-518E-40E7-9BA4-B494EC3582D5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

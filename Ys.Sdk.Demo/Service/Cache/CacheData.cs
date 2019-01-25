@@ -35,7 +35,11 @@ namespace Ys.Sdk.Demo.Service.Cache
 		/// </summary>
 		public PlayConfig PlayConfig { get; set; } = new PlayConfig();
 
-
+		/// <summary>
+		/// 萤石云设备信息
+		/// </summary>
+		public List<Core.Entities.V2.DeviceInfo> YSDeviceList { get; set; } = new List<Core.Entities.V2.DeviceInfo>();
+		
 		/// <summary>
 		/// 萤石云安全key
 		/// </summary>
@@ -47,7 +51,7 @@ namespace Ys.Sdk.Demo.Service.Cache
 		//public List<CameraInfo> CameraList { get; set; }
 
 		public CacheData()
-		{ 
+		{
 		}
 	}
 }

@@ -31,10 +31,10 @@ namespace Ys.Sdk.Demo.Core.Entities.Response
 	public class Token
 	{
 		/// <summary>
-		/// Token
+		/// 
 		/// </summary>
 		public string AccessToken { get; set; }
 
-		public string UserId { get; set; }
+		public long ExpireTime { get; set; }
 	}
 }

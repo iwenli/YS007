@@ -13,6 +13,7 @@ using Txooo.Extension;
 using Txooo.Extension.Extension;
 using Ys.Sdk.Demo.Controls;
 using Ys.Sdk.Demo.Core;
+using Ys.Sdk.Demo.Core.V2;
 using Ys.Sdk.Demo.Forms;
 using Ys.Sdk.Demo.Properties;
 using Ys.Sdk.Demo.Service;
@@ -30,14 +31,26 @@ namespace Ys.Sdk.Demo
 
 			//try
 			//{
-			//	M();
+			//	#region 萤石云SKD测试
+			//	var _list = SDKAdapter.GetDeviceList();
+			//	var _list1 = SDKAdapter.GetDeviceList(true);
+			//	var _device = SDKAdapter.GetDevice("C16354862");
+			//	//T("DisposeSdk", YsAction.DisposeSdk());
 
+			//	void T(string msg = "", bool result = true)
+			//	{
+			//		AppendLogInfo($"{msg} { (result ? "成功" : "失败")}");
+			//	}
+			//	#endregion
 			//}
 			//catch (Exception ex)
 			//{
-			//	Log(ex.Message);
+			//	AppendLogError(ex.Message);
 			//}
+
+
 			Load += MainForm_Load;
+			FormClosed += async (s, e) => { await Task.Run(() => { SDKAdapter.Dispose(); }); };
 		}
 
 		private async void MainForm_Load(object sender, EventArgs e)
@@ -53,6 +66,7 @@ namespace Ys.Sdk.Demo
 		/// <summary>
 		/// 主要业务绑定
 		/// </summary>
+		/// 
 		async Task InitFormControlAsync()
 		{
 			InitContextMenu();
@@ -123,13 +137,20 @@ namespace Ys.Sdk.Demo
 		{
 			BeginOperation("正在初始化配置信息...", 0, true);
 			_context = new ServiceContext();
-			YsAction.OnSubscribe += (s, e) =>
+			SDKAdapter.OnData += (s, e) =>
+			 {
+				 AppendLogInfo(e.ToString());
+			 };
+			SDKAdapter.OnMessage += (s, e) =>
 			{
-				AppendLogInfo(e.ToJson());
+				AppendLogInfo(e.ToString());
+			};
+			SDKAdapter.OnPushMessage += (s, e) =>
+			{
+				AppendLogInfo(e.ToString());
 			};
 			EndOperation();
 		}
-
 
 		#endregion
 
@@ -267,27 +288,6 @@ namespace Ys.Sdk.Demo
 
 		#endregion
 
-		#region 萤石云SKD测试
-		void M()
-		{
-			T("InitSdk", YsAction.InitSdk());
-			T(YsAction.GetAccessToken());
-			//var _list = YsAction.GetCameraList("C39424393");
-			//_list = YsAction.GetCameraList();
-			//T("DisposeSdk", YsAction.DisposeSdk());
-		}
-
-		void T(string msg = "", bool result = true)
-		{
-			AppendLogInfo($"{msg} { (result ? "成功" : "失败")}");
-		}
-		#endregion
-
-		//void AppendLogInfo(string msg)
-		//{
-		//	base.AppendLogInfo(msg);
-		//}
-
 		/// <summary>
 		/// 初始化监控列表
 		/// </summary>
@@ -297,10 +297,12 @@ namespace Ys.Sdk.Demo
 			await Task.Run(() =>
 			{
 				var deviceList = _context.CacheContext.Data.DeviceList.FindAll(m => m.DeviceType == 1);
+
 				foreach (var device in deviceList)
 				{
+					var cameraDevice = _context.CacheContext.Data.YSDeviceList.Find(m => m.DeviceSerial == device.Info); ;
 					var store = _context.CacheContext.Data.StoreList.Find(m => m.StoreId == device.StoreId);
-					foreach (var camera in device.CameraList)
+					foreach (var camera in cameraDevice.CameraInfo)
 					{
 						var lbl0 = new Label()
 						{
@@ -309,20 +311,20 @@ namespace Ys.Sdk.Demo
 						};
 						var lbl1 = new Label()
 						{
-							Text = $"{camera.DeviceName}-{camera.CameraName}",
+							Text = $"通道：{camera.CameraNo}({camera.CameraName})",
 							AutoSize = true
 						};
 						var lbl2 = new Label()
 						{
-							Text = $"加密状态:{(camera.IsEncrypt == 1 ? "启用" : "未启用")}"
+							Text = $"加密状态:{(cameraDevice.IsEncrypt ? "启用" : "未启用")}"
 						};
 						var lbl3 = new Label()
 						{
-							Text = $"在线状态:{(camera.Status == 1 ? "在线" : "不在线")}"
+							Text = $"在线状态:{(cameraDevice.Status == 1 ? "在线" : "不在线")}"
 						};
 						var pic = new PictureBox();
 						pic.Size = new Size(120, 120);
-						pic.Tag = camera.CameraId;
+						pic.Tag = camera.Id;
 						pic.Name = "pic_" + pic.Tag;
 						pic.BackgroundImage = Resources.homeDevice;// Image.FromStream(WebRequest.Create(camera.PicUrl).GetResponse().GetResponseStream());//取网络图片
 						pic.BackgroundImageLayout = ImageLayout.Stretch;//背景图自适应控件大小
@@ -355,18 +357,19 @@ namespace Ys.Sdk.Demo
 				return;
 			}
 			var cameraId = pictureBox.Tag.ToString();
-			var camera = _context.CacheContext.Data.DeviceList.SelectMany(m => m.CameraList).FirstOrDefault(m => m.CameraId == cameraId);
-			if (camera.IsNull())
+			var camera = _context.CacheContext.Data.YSDeviceList.SelectMany(m => m.CameraInfo).FirstOrDefault(m => m.Id == cameraId);
+			var _device = _context.CacheContext.Data.YSDeviceList.Find(m => m.DeviceSerial == camera?.DeviceSerial);
+			if (_device.IsNull())
 			{
 				EM("不存在的设备！");
 				return;
 			}
-			if (camera.Status != 1)
+			if (_device?.Status != 1)
 			{
 				EM("设备不在线，无法播放！");
 				return;
 			}
-			if (playControls.Any(m => m.Camera?.CameraId == cameraId))
+			if (playControls.Any(m => m.Camera?.Id == cameraId))
 			{
 				IS("该视频已经在播放中，请勿重复点击！");
 				return;

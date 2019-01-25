@@ -136,19 +136,19 @@ namespace Ys.Sdk.Demo.Core
 		/// <returns></returns>
 		public delegate int MsgHandler(IntPtr SID, uint MsgType, uint Error, string Info, IntPtr pUser);
 
-		/// <summary>
-		/// 回调实例
-		/// </summary>
-		/// <param name="SID"></param>
-		/// <param name="MsgType"></param>
-		/// <param name="Error"></param>
-		/// <param name="Info"></param>
-		/// <param name="pUser"></param>
-		/// <returns></returns>
-		public static int HandlerWork(IntPtr SID, uint MsgType, uint Error, string Info, IntPtr pUser)
-		{
-			return 0;
-		}
+		///// <summary>
+		///// 回调实例
+		///// </summary>
+		///// <param name="SID"></param>
+		///// <param name="MsgType"></param>
+		///// <param name="Error"></param>
+		///// <param name="Info"></param>
+		///// <param name="pUser"></param>
+		///// <returns></returns>
+		//public static int HandlerWork(IntPtr SID, uint MsgType, uint Error, string Info, IntPtr pUser)
+		//{
+		//	return 0;
+		//}
 
 
 		/// <summary>
